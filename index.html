@@ -1,0 +1,1256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>FlexTrade Citrix UI Automation — Architecture Proposal</title>
+<style>
+  :root {
+    --bg-canvas: #0b111e;
+    --bg-surface: #111a2e;
+    --bg-surface-alt: #162238;
+    --bg-card: #18263f;
+    --border-dim: #223554;
+    --border-accent: #2e4a77;
+    --border-highlight: #3b82f6;
+    --text-primary: #f1f5f9;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --accent-blue: #3b82f6;
+    --accent-blue-soft: rgba(59, 130, 246, 0.15);
+    --accent-cyan: #0ea5e9;
+    --accent-teal: #14b8a6;
+    --accent-emerald: #10b981;
+    --accent-amber: #f59e0b;
+    --accent-rose: #f43f5e;
+    --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    font-size: 15px;
+    background-color: var(--bg-canvas);
+  }
+
+  body {
+    font-family: var(--font-sans);
+    color: var(--text-primary);
+    background-color: var(--bg-canvas);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  /* Sticky Top Bar for Mobile & Quick Jumps */
+  .mobile-nav-bar {
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    background: rgba(17, 26, 46, 0.95);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border-dim);
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .nav-brand {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #ffffff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .nav-brand span {
+    color: var(--accent-cyan);
+  }
+
+  .jump-select {
+    background: var(--bg-surface-alt);
+    color: var(--accent-cyan);
+    border: 1px solid var(--border-accent);
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-family: var(--font-sans);
+    font-weight: 600;
+    outline: none;
+    max-width: 170px;
+  }
+
+  /* Main Document Container */
+  main.document-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 24px 16px 80px;
+  }
+
+  /* Document Header */
+  .doc-header {
+    border-bottom: 1px solid var(--border-dim);
+    padding-bottom: 28px;
+    margin-bottom: 36px;
+  }
+
+  .badge-tag {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--accent-cyan);
+    background: rgba(14, 165, 233, 0.12);
+    padding: 3px 8px;
+    border-radius: 4px;
+    border: 1px solid rgba(14, 165, 233, 0.25);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  h1.doc-title {
+    font-size: 1.85rem;
+    font-weight: 800;
+    line-height: 1.25;
+    color: #ffffff;
+    letter-spacing: -0.02em;
+    margin-bottom: 12px;
+  }
+
+  h1.doc-title span {
+    color: var(--accent-blue);
+    display: block;
+  }
+
+  .doc-subtitle {
+    font-size: 0.98rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  .meta-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-top: 24px;
+    padding-top: 18px;
+    border-top: 1px solid var(--border-dim);
+  }
+
+  .meta-item {
+    background: var(--bg-surface);
+    padding: 10px 12px;
+    border-radius: 6px;
+    border: 1px solid var(--border-dim);
+  }
+
+  .meta-label {
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+  }
+
+  .meta-val {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-top: 3px;
+    word-break: break-word;
+  }
+
+  /* Sections */
+  section.doc-section {
+    margin-bottom: 48px;
+    scroll-margin-top: 70px;
+  }
+
+  .section-badge-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+
+  .sec-num {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--accent-blue);
+    background: var(--accent-blue-soft);
+    padding: 2px 8px;
+    border-radius: 4px;
+    border: 1px solid rgba(59, 130, 246, 0.25);
+  }
+
+  h2.sec-heading {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: -0.01em;
+  }
+
+  .sec-desc {
+    font-size: 0.92rem;
+    color: var(--text-secondary);
+    margin-top: 6px;
+    margin-bottom: 20px;
+  }
+
+  /* Cards & Surface Layouts */
+  .surface-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-dim);
+    border-radius: 8px;
+    padding: 18px;
+    margin-bottom: 16px;
+  }
+
+  .kpi-scroll-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin: 20px 0;
+  }
+
+  .kpi-card {
+    background: linear-gradient(180deg, var(--bg-surface-alt) 0%, var(--bg-surface) 100%);
+    border: 1px solid var(--border-dim);
+    border-radius: 8px;
+    padding: 16px;
+  }
+
+  .kpi-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--accent-cyan);
+    margin-bottom: 4px;
+  }
+
+  .kpi-desc {
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+  }
+
+  .banner-principle {
+    background: linear-gradient(90deg, rgba(59, 130, 246, 0.12) 0%, rgba(14, 165, 233, 0.08) 100%);
+    border-left: 4px solid var(--accent-blue);
+    border-radius: 0 8px 8px 0;
+    padding: 16px;
+    margin: 20px 0;
+  }
+
+  .banner-label {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent-blue);
+    margin-bottom: 4px;
+  }
+
+  .banner-quote {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #ffffff;
+  }
+
+  /* Responsive Diagrams with Mobile Horizontal Scroll Indicator */
+  .diagram-wrapper {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-dim);
+    border-radius: 8px;
+    padding: 16px;
+    margin: 20px 0;
+  }
+
+  .diagram-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+
+  .diagram-title {
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .scroll-hint {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    color: var(--accent-cyan);
+    background: rgba(14, 165, 233, 0.1);
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+
+  .diagram-scroll-pane {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 8px;
+  }
+
+  svg.enterprise-diagram {
+    display: block;
+    min-width: 680px;
+    height: auto;
+  }
+
+  /* Tables */
+  .table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border: 1px solid var(--border-dim);
+    border-radius: 8px;
+    margin: 20px 0;
+  }
+
+  table.data-table {
+    width: 100%;
+    min-width: 580px;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+    text-align: left;
+  }
+
+  table.data-table th {
+    background: var(--bg-surface-alt);
+    color: var(--text-primary);
+    padding: 12px 14px;
+    font-weight: 600;
+    border-bottom: 1px solid var(--border-dim);
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    text-transform: uppercase;
+  }
+
+  table.data-table td {
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--border-dim);
+    color: var(--text-secondary);
+  }
+
+  table.data-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .badge-metric {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+
+  .badge-danger {
+    background: rgba(244, 63, 94, 0.15);
+    color: #fb7185;
+    border: 1px solid rgba(244, 63, 94, 0.3);
+  }
+
+  .badge-success {
+    background: rgba(16, 185, 129, 0.15);
+    color: #34d399;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+  }
+
+  .badge-neutral {
+    background: rgba(148, 163, 184, 0.12);
+    color: var(--text-secondary);
+    border: 1px solid var(--border-dim);
+  }
+
+  /* Code Blocks */
+  .code-block {
+    background: #080d17;
+    border: 1px solid var(--border-dim);
+    border-radius: 6px;
+    padding: 14px;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: #e2e8f0;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    line-height: 1.5;
+    margin: 14px 0;
+  }
+
+  .code-keyword { color: #f472b6; font-weight: 600; }
+  .code-fn { color: #60a5fa; }
+  .code-str { color: #34d399; }
+  .code-comment { color: #64748b; font-style: italic; }
+
+  /* Steps List */
+  .step-journey {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 20px 0;
+  }
+
+  .step-row {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-dim);
+    border-radius: 6px;
+    padding: 12px 14px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .step-index {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--accent-blue);
+    background: var(--accent-blue-soft);
+    padding: 3px 7px;
+    border-radius: 4px;
+    min-width: 32px;
+    text-align: center;
+    margin-top: 2px;
+  }
+
+  .step-content {
+    flex-grow: 1;
+  }
+
+  .step-title {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .step-detail {
+    font-size: 0.78rem;
+    font-family: var(--font-mono);
+    color: var(--accent-cyan);
+    margin-top: 3px;
+    word-break: break-all;
+  }
+
+  /* Two Column Grid for Desktop / Tablet */
+  @media (min-width: 640px) {
+    .kpi-scroll-container {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .grid-2-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+  }
+
+  @media (min-width: 840px) {
+    .kpi-scroll-container {
+      grid-template-columns: repeat(5, 1fr);
+    }
+    .meta-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- MOBILE / DESKTOP JUMP HEADER -->
+<div class="mobile-nav-bar">
+  <div class="nav-brand">FlexTrade <span>UIA Arch</span></div>
+  <select class="jump-select" onchange="if(this.value) location.hash = this.value;">
+    <option value="">Jump to section...</option>
+    <option value="#sec-1">01. Exec Summary</option>
+    <option value="#sec-2">02. Current State</option>
+    <option value="#sec-3">03. Key Question</option>
+    <option value="#sec-4">04. Target Arch</option>
+    <option value="#sec-5">05. Agent Internals</option>
+    <option value="#sec-6">06. UI Discovery</option>
+    <option value="#sec-7">07. Execution Flow</option>
+    <option value="#sec-8">08. Not Pixel Auto</option>
+    <option value="#sec-9">09. Prerequisites</option>
+    <option value="#sec-10">10. Deployment</option>
+    <option value="#sec-11">11. Security</option>
+    <option value="#sec-12">12. POC Roadmap</option>
+    <option value="#sec-13">13. Success Criteria</option>
+    <option value="#sec-14">14. Risks &amp; Mitigations</option>
+    <option value="#sec-15">15. Final Design</option>
+    <option value="#sec-16">16. Next Steps</option>
+  </select>
+</div>
+
+<!-- DOCUMENT BODY -->
+<main class="document-container">
+
+  <!-- HEADER -->
+  <header class="doc-header">
+    <span class="badge-tag">Enterprise Architecture Proposal</span>
+    <h1 class="doc-title">FlexTrade Citrix UI Automation<span>Agent-Based Architecture</span></h1>
+    <p class="doc-subtitle">
+      A deterministic, locator-driven strategy executing inside remote interactive sessions via Microsoft Windows UI Automation (UIA)—eliminating pixel scraping, OCR, and coordinate dependencies.
+    </p>
+
+    <div class="meta-grid">
+      <div class="meta-item">
+        <div class="meta-label">Target System</div>
+        <div class="meta-val">FlexTrade OMS/EMS</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">Delivery Channel</div>
+        <div class="meta-val">Citrix Virtual Apps</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">Automation Engine</div>
+        <div class="meta-val">Python / PyWinAuto (UIA)</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">Control Protocol</div>
+        <div class="meta-val">Secure Intra-Session REST</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- SECTION 1 -->
+  <section id="sec-1" class="doc-section">
+    <div class="section-badge-wrap">
+      <span class="sec-num">01</span>
+      <h2 class="sec-heading">Executive Summary</h2>
+    </div>
+    <p class="sec-desc">
+      Automating FlexTrade running inside Citrix Workspace environments presents a classic enterprise challenge: the client workstation receives only an ICA video stream, blinding standard desktop test runners to the underlying control metadata. Conventional workarounds rely on screen scraping, OCR, and coordinate clicks—introducing severe flakiness and high maintenance overhead.
+    </p>
+
+    <div class="kpi-scroll-container">
+      <div class="kpi-card">
+        <div class="kpi-title">Locator-Based</div>
+        <div class="kpi-desc">Queries native Windows controls directly via structural attributes.</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Pixel-Free</div>
+        <div class="kpi-desc">Zero dependence on screen resolution, DPI scaling, OCR, or templates.</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Citrix Compatible</div>
+        <div class="kpi-desc">Executes co-located in the target session behind the ICA stream barrier.</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">API Driven</div>
+        <div class="kpi-desc">QA test harnesses trigger actions via deterministic HTTP/REST endpoints.</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Reusable Agent</div>
+        <div class="kpi-desc">Self-contained headless service embeddable in any remote Windows session.</div>
+      </div>
+    </div>
+
+    <div class="banner-principle">
+      <div class="banner-label">Core Architecture Principle</div>
+      <div class="banner-quote">“Automate the application controls — not the pixels.”</div>
+    </div>
+
+    <p class="sec-desc" style="margin-bottom: 0;">
+      This proposal articulates an agent-based approach. By positioning a lightweight, standalone automation service directly inside the remote Windows Citrix interactive session, tests can tap directly into the <strong>Microsoft Windows UI Automation (UIA)</strong> subsystem. The key technical prerequisite is strictly validating whether FlexTrade's compiled UI technology exposes its controls to the Windows Accessibility layer inside that session.
+    </p>
+  </section>
+
+  <!-- SECTION 2 -->
+  <section id="sec-2" class="doc-section">
+    <div class="section-badge-wrap">
+      <span class="sec-num">02</span>
+      <h2 class="sec-heading">Current-State Architecture</h2>
+    </div>
+    <p class="sec-desc">
+      In the existing environment, the test runner or user interacts through the Citrix Workspace app. The local operating system has access only to the Citrix client container window. It is physically blind to the control tree of FlexTrade.
+    </p>
+
+    <div class="diagram-wrapper">
+      <div class="diagram-header">
+        <span class="diagram-title">Figure 2.1: Current Remoting Paths</span>
+        <span class="scroll-hint">&larr; Swipe diagram &rarr;</span>
+      </div>
+      <div class="diagram-scroll-pane">
+        <svg class="enterprise-diagram" viewBox="0 0 720 300" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker id="arr-rose" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 1 L 10 5 L 0 9 z" fill="#fb7185"/>
+            </marker>
+            <marker id="arr-blue" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8"/>
+            </marker>
+          </defs>
+          <!-- Workstation Box -->
+          <rect x="10" y="20" width="220" height="260" rx="6" fill="#111827" stroke="#334155" stroke-width="1.5"/>
+          <text x="25" y="48" fill="#ffffff" font-size="12" font-weight="700">LOCAL QA MACHINE</text>
+          <text x="25" y="66" fill="#64748b" font-size="10">External Workspace</text>
+          
+          <rect x="25" y="90" width="190" height="60" rx="4" fill="#1e293b" stroke="#3b82f6"/>
+          <text x="35" y="115" fill="#cbd5e1" font-size="11" font-weight="600">Citrix Workspace Client</text>
+          <text x="35" y="133" fill="#64748b" font-size="9">Renders incoming video</text>
+
+          <rect x="25" y="170" width="190" height="85" rx="4" fill="#0f172a" stroke="#334155" stroke-dasharray="3"/>
+          <text x="35" y="195" fill="#94a3b8" font-size="10" font-weight="600">Local OS Window</text>
+          <text x="35" y="215" fill="#64748b" font-size="9">&bull; Sees video canvas only</text>
+          <text x="35" y="232" fill="#64748b" font-size="9">&bull; FlexTrade controls hidden</text>
+
+          <!-- Citrix Server Box -->
+          <rect x="490" y="20" width="220" height="260" rx="6" fill="#0f172a" stroke="#1d4ed8" stroke-width="1.5"/>
+          <text x="505" y="48" fill="#ffffff" font-size="12" font-weight="700">CITRIX REMOTE HOST</text>
+          <text x="505" y="66" fill="#38bdf8" font-size="10">Interactive Desktop Session</text>
+
+          <rect x="505" y="90" width="190" height="65" rx="4" fill="#1e293b" stroke="#10b981"/>
+          <text x="515" y="115" fill="#34d399" font-size="11" font-weight="700">FlexTrade Process</text>
+          <text x="515" y="132" fill="#94a3b8" font-size="9">OMS / EMS Core Windows</text>
+          <text x="515" y="145" fill="#64748b" font-size="8">Win32 / WPF / C++ runtime</text>
+
+          <rect x="505" y="175" width="190" height="80" rx="4" fill="#111c2e" stroke="#3b82f6"/>
+          <text x="515" y="200" fill="#ffffff" font-size="10" font-weight="600">Windows Session APIs</text>
+          <text x="515" y="220" fill="#94a3b8" font-size="9">&bull; Windows UI Automation</text>
+          <text x="515" y="237" fill="#94a3b8" font-size="9">&bull; Active Control Registry</text>
+
+          <!-- Paths -->
+          <path d="M 505 110 L 215 110" fill="none" stroke="#fb7185" stroke-width="2" marker-end="url(#arr-rose)"/>
+          <rect x="255" y="92" width="210" height="22" rx="4" fill="#1f1322" stroke="#e11d48"/>
+          <text x="265" y="107" fill="#fda4af" font-size="9" font-weight="700" font-family="monospace">DISPLAY: ICA Video Stream</text>
+
+          <path d="M 215 210 L 505 210" fill="none" stroke="#38bdf8" stroke-width="2" marker-end="url(#arr-blue)"/>
+          <rect x="255" y="218" width="210" height="22" rx="4" fill="#0c2340" stroke="#0284c7"/>
+          <text x="265" y="233" fill="#7dd3fc" font-size="9" font-weight="700" font-family="monospace">INPUT: Raw Keys / Clicks</text>
+        </svg>
+      </div>
+    </div>
+    <p class="sec-desc">
+      <strong>Why keyboard input works despite remote rendering:</strong> Citrix captures user keystrokes locally and forwards raw scancodes into the remote session, where the operating system injects them directly into the active window. Inside the session, FlexTrade executes as a genuine Win32/WPF process governed by native Windows APIs.
+    </p>
+  </section>
+
+  <!-- SECTION 3 -->
+  <section id="sec-3" class="doc-section">
+    <div class="section-badge-wrap">
+      <span class="sec-num">03</span>
+      <h2 class="sec-heading">The Key Technical Question</h2>
+    </div>
+    <p class="sec-desc">
+      Before engineering an enterprise framework, the technical team must answer one decisive feasibility checkpoint.
+    </p>
+
+    <div class="surface-card" style="border-left: 4px solid var(--accent-amber); background: linear-gradient(90deg, rgba(245, 158, 11, 0.08) 0%, var(--bg-surface) 100%);">
+      <div style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--accent-amber); font-weight: 700; text-transform: uppercase;">Feasibility Gate 0</div>
+      <h3 style="font-size: 1.15rem; color: #ffffff; margin: 6px 0 10px;">Can FlexTrade expose its Windows UI controls through Microsoft UI Automation inside the Citrix session?</h3>
+      <p style="color: var(--text-secondary); font-size: 0.88rem;">
+        Whether an application runs in Citrix or locally, it must support accessibility providers (Win32, MSAA, or UIA) for an automation engine to inspect its control tree. If FlexTrade uses proprietary non-standard canvas rendering, direct control hooks are restricted.
+      </p>
+    </div>
+
+    <div class="grid-2-col" style="margin-top: 16px;">
+      <div class="surface-card" style="border-top: 3px solid var(--accent-emerald);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+          <strong style="color: var(--accent-emerald); font-size: 1rem;">BRANCH: YES</strong>
+          <span class="badge-metric badge-success">Target</span>
+        </div>
+        <p style="font-size: 0.82rem; color: var(--text-secondary);">
+          Controls are exposed to Windows UIA. PyWinAuto can locate and interact with buttons, fields, and grids deterministically. Full agent-based automation is feasible.
+        </p>
+      </div>
+
+      <div class="surface-card" style="border-top: 3px solid var(--accent-rose);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+          <strong style="color: var(--accent-rose); font-size: 1rem;">BRANCH: NO</strong>
+          <span class="badge-metric badge-danger">Pivot</span>
+        </div>
+        <p style="font-size: 0.82rem; color: var(--text-secondary);">
+          Controls render as an opaque canvas without accessibility hooks. PyWinAuto alone will not solve the problem. Investigate FlexTrade's vendor API or approved integration bridges.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 4 -->
+  <section id="sec-4" class="doc-section">
+    <div class="section-badge-wrap">
+      <span class="sec-num">04</span>
+      <h2 class="sec-heading">Proposed Target Architecture</h2>
+    </div>
+    <p class="sec-desc">
+      The architecture partitions duties across three isolated security zones. The automation engine runs directly inside the interactive session, eliminating remoting friction while maintaining central orchestrator control.
+    </p>
+
+    <div class="diagram-wrapper">
+      <div class="diagram-header">
+        <span class="diagram-title">Figure 4.1: Target Deployment Topology</span>
+        <span class="scroll-hint">&larr; Swipe diagram &rarr;</span>
+      </div>
+      <div class="diagram-scroll-pane">
+        <svg class="enterprise-diagram" viewBox="0 0 720 300" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker id="flow-arr" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8"/>
+            </marker>
+          </defs>
+          <!-- Zone 1 -->
+          <rect x="10" y="20" width="200" height="260" rx="6" fill="#111827" stroke="#1e293b"/>
+          <text x="25" y="45" fill="#38bdf8" font-size="10" font-weight="700" font-family="monospace">ZONE 1: QA / CI</text>
+          <text x="25" y="62" fill="#94a3b8" font-size="9">Test Execution Client</text>
+          <rect x="25" y="80" width="170" height="40" rx="4" fill="#1e293b"/>
+          <text x="35" y="105" fill="#ffffff" font-size="10">Pytest Framework</text>
+          <rect x="25" y="130" width="170" height="40" rx="4" fill="#1e293b"/>
+          <text x="35" y="155" fill="#ffffff" font-size="10">Fixtures &amp; Test Data</text>
+          <rect x="25" y="180" width="170" height="40" rx="4" fill="#1e293b"/>
+          <text x="35" y="205" fill="#ffffff" font-size="10">Reports / Dashboards</text>
+
+          <!-- Zone 1 to 2 Arrow -->
+          <path d="M 210 150 L 260 150" fill="none" stroke="#38bdf8" stroke-width="2" marker-end="url(#flow-arr)"/>
+
+          <!-- Zone 2 -->
+          <rect x="260" y="20" width="180" height="260" rx="6" fill="#0f172a" stroke="#1e293b"/>
+          <text x="275" y="45" fill="#0ea5e9" font-size="10" font-weight="700" font-family="monospace">ZONE 2: SECURITY</text>
+          <text x="275" y="62" fill="#94a3b8" font-size="9">Corporate Gateway</text>
+          <rect x="275" y="80" width="150" height="55" rx="4" fill="#1e293b"/>
+          <text x="285" y="105" fill="#ffffff" font-size="10">REST API Gateway</text>
+          <text x="285" y="122" fill="#94a3b8" font-size="8">Auth &amp; Session Pinning</text>
+          <rect x="275" y="150" width="150" height="55" rx="4" fill="#1e293b"/>
+          <text x="285" y="175" fill="#ffffff" font-size="10">Internal Firewall</text>
+          <text x="285" y="192" fill="#94a3b8" font-size="8">Restricted Port Route</text>
+
+          <!-- Zone 2 to 3 Arrow -->
+          <path d="M 440 150 L 490 150" fill="none" stroke="#38bdf8" stroke-width="2" marker-end="url(#flow-arr)"/>
+
+          <!-- Zone 3 -->
+          <rect x="490" y="20" width="220" height="260" rx="6" fill="#162238" stroke="#2563eb"/>
+          <text x="505" y="45" fill="#60a5fa" font-size="10" font-weight="700" font-family="monospace">ZONE 3: CITRIX</text>
+          <text x="505" y="62" fill="#94a3b8" font-size="9">In-Session Host</text>
+
+          <rect x="505" y="80" width="190" height="90" rx="4" fill="#1e293b" stroke="#38bdf8"/>
+          <text x="515" y="102" fill="#38bdf8" font-size="10" font-weight="700">Automation Agent</text>
+          <text x="515" y="120" fill="#cbd5e1" font-size="9">&bull; REST Endpoint Handler</text>
+          <text x="515" y="136" fill="#cbd5e1" font-size="9">&bull; PyWinAuto Engine</text>
+          <text x="515" y="152" fill="#cbd5e1" font-size="9">&bull; Windows UIA Hooks</text>
+
+          <rect x="505" y="185" width="190" height="75" rx="4" fill="#0f172a" stroke="#10b981"/>
+          <text x="515" y="210" fill="#34d399" font-size="10" font-weight="700">FlexTrade OMS</text>
+          <text x="515" y="228" fill="#94a3b8" font-size="9">Win32 Trading Windows</text>
+          <text x="515" y="244" fill="#64748b" font-size="8">Exposing Native Controls</text>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 5 -->
+  <section id="sec-5" class="doc-section">
+    <div class="section-badge-wrap">
+      <span class="sec-num">05</span>
+      <h2 class="sec-heading">Inside the Automation Agent</h2>
+    </div>
+    <p class="sec-desc">
+      The internal agent acts as an abstraction facade. Test authors write standard tests without needing to understand PyWinAuto memory models, COM threading apartments, or low-level Win32 window handles.
+    </p>
+
+    <div class="surface-card">
+      <div style="font-size: 0.85rem; font-weight: 700; color: #ffffff; margin-bottom: 10px;">Agent Layer Hierarchy</div>
+      <div style="display: flex; flex-direction: column; gap: 6px; font-size: 0.8rem;">
+        <div style="background: var(--bg-surface-alt); padding: 8px 12px; border-left: 3px solid #38bdf8; border-radius: 4px;">
+          <strong>1. REST API Layer:</strong> Exposes <code>/ui/type</code>, <code>/ui/click</code>, <code>/ui/wait</code>, <code>/ui/text</code>
+        </div>
+        <div style="background: var(--bg-surface-alt); padding: 8px 12px; border-left: 3px solid #0ea5e9; border-radius: 4px;">
+          <strong>2. Locator Engine:</strong> Translates abstract locator JSON into live element queries
+        </div>
+        <div style="background: var(--bg-surface-alt); padding: 8px 12px; border-left: 3px solid #6366f1; border-radius: 4px;">
+          <strong>3. PyWinAuto Core:</strong> Manages window specifications with <code>backend="uia"</code>
+        </div>
+        <div style="background: var(--bg-surface-alt); padding: 8px 12px; border-left: 3px solid #10b981; border-radius: 4px;">
+          <strong>4. FlexTrade Controls:</strong> Native UI buttons, text fields, and grid blotters
+        </div>
+      </div>
+    </div>
+
+    <div class="code-block">
+<span class="code-comment"># Test Framework View (Runs outside Citrix)</span>
+agent.<span class="code-fn">type</span>(
+    locator={<span class="code-str">"name"</span>: <span class="code-str">"Order ID"</span>, <span class="code-str">"type"</span>: <span class="code-str">"Edit"</span>},
+    value=<span class="code-str">"ORD123456"</span>
+)
+agent.<span class="code-fn">press_key</span>(locator={<span class="code-str">"name"</span>: <span class="code-str">"Order ID"</span>}, key=<span class="code-str">"{ENTER}"</span>)
+    </div>
+    <div style="font-size: 0.75rem; color: var(--text-muted);">
+      * Note: <code>"Order ID"</code> is an illustrative locator example. Actual identifiers will be extracted during discovery.
+    </div>
+  </section>
+
+  <!-- SECTION 6 -->
+  <section id="sec-6" class="doc-section">
+    <div class="section-badge-wrap">
+      <span class="sec-num">06</span>
+      <h2 class="sec-heading">Dynamic UI Discovery</h2>
+    </div>
+    <p class="sec-desc">
+      A critical architectural mandate is eliminating external utility dependencies such as Microsoft <code>Inspect.exe</code>. The agent contains built-in dynamic inspection endpoints that traverse the UIA tree and dump structured JSON representations of the live window.
+    </p>
+
+    <div class="surface-card">
+      <div style="font-size: 0.85rem; font-weight: 700; color: #ffffff; margin-bottom: 8px;">Discovered Tree Representation</div>
+      <div style="font-family: var(--font-mono); font-size: 0.78rem; color: var(--text-secondary); background: #080d17; padding: 12px; border-radius: 6px; line-height: 1.7; overflow-x: auto;">
+        <span style="color: #60a5fa;">FlexTrade Main Window</span> [Type: Window]<br>
+        &boxvr;&boxh;&boxh; <span style="color: #94a3b8;">Trading Ribbon</span> [Type: ToolBar]<br>
+        &boxvr;&boxh;&boxh; <span style="color: #34d399;">Edit &mdash; Order ID</span> [AutomationId: "txtOrdId"]<br>
+        &boxvr;&boxh;&boxh; <span style="color: #38bdf8;">Button &mdash; Search</span> [AutomationId: "btnSearch"]<br>
+        &boxvr;&boxh;&boxh; <span style="color: #38bdf8;">Button &mdash; Submit</span> [AutomationId: "btnSubmit"]<br>
+        &boxur;&boxh;&boxh; <span style="color: #f59e0b;">Data Grid &mdash; Blotter</span> [AutomationId: "gridBlotter"]
+      </div>
+      <p style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 10px;">
+        <strong>Self-Contained Discovery:</strong> The agent inspects standard UIA properties (<code>AutomationId</code>, <code>Name</code>, <code>ControlType</code>, <code>ClassName</code>) dynamically over REST without requiring manual third-party inspection tools.
+      </p>
+    </div>
+  </section>
+
+  <!-- SECTION 7 -->
+  <section id="sec-7" class="doc-section">
+    <div class="section-badge-wrap">
+      <span class="sec-num">07</span>
+      <h2 class="sec-heading">End-to-End Execution Flow</h2>
+    </div>
+    <p class="sec-desc">
+      A step-by-step trace showing an automated validation scenario: populating an Order ID, triggering an enterprise search query, and reading back real-time blotter results.
+    </p>
+
+    <div class="step-journey">
+      <div class="step-row">
+        <div class="step-index">01</div>
+        <div class="step-content">
+          <div class="step-title">Launch FlexTrade</div>
+          <div class="step-detail">Initiated within interactive Citrix session</div>
+        </div>
+      </div>
+      <div class="step-row">
+        <div class="step-index">02</div>
+        <div class="step-content">
+          <div class="step-title">Start Agent Service</div>
+          <div class="step-detail">Runs co-located in the same Windows desktop</div>
+        </div>
+      </div>
+      <div class="step-row">
+        <div class="step-index">03</div>
+        <div class="step-content">
+          <div class="step-title">QA Dispatches REST Request</div>
+          <div class="step-detail">POST /ui/type { locator: "Order ID", value: "ORD123456" }</div>
+        </div>
+      </div>
+      <div class="step-row">
+        <div class="step-index">04</div>
+        <div class="step-content">
+          <div class="step-title">Agent Resolves Control</div>
+          <div class="step-detail">Scans live UIA tree and binds to target edit element</div>
+        </div>
+      </div>
+      <div class="step-row">
+        <div class="step-index">05</div>
+        <div class="step-content">
+          <div class="step-title">Input Injection</div>
+          <div class="step-detail">Populates field directly via UIA ValuePattern</div>
+        </div>
+      </div>
+      <div class="step-row">
+        <div class="step-index">06</div>
+        <div class="step-content">
+          <div class="step-title">Dispatch Key Press</div>
+          <div class="step-detail">POST /ui/keypress { key: "ENTER" }</div>
+        </div>
+      </div>
+      <div class="step-row">
+        <div class="step-index">07</div>
+        <div class="step-content">
+          <div class="step-title">Read Result &amp; Assert</div>
+          <div class="step-detail">Agent extracts cell text; Pytest asserts status == "FILLED"</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 8 -->
+  <section id="sec-8" class="doc-section">
+    <div class="section-badge-wrap">
+      <span class="sec-num">08</span>
+      <h2 class="sec-heading">Why This Is NOT Pixel Automation</h2>
+    </div>
+    <p class="sec-desc">
+      Pixel/Image automation relies on fragile heuristics that fail under continuous integration. The table below demonstrates why UIA control automation is fundamentally different and enterprise-grade.
+    </p>
+
+    <div class="table-wrapper">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Characteristic</th>
+            <th>Pixel / Image / OCR</th>
+            <th>UIA Agent (Proposed)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Element Targeting</strong></td>
+            <td>Absolute/relative coordinates</td>
+            <td>Programmatic UIA properties</td>
+          </tr>
+          <tr>
+            <td><strong>Resolution Sensitivity</strong></td>
+            <td><span class="badge-metric badge-danger">Breaks</span> On DPI or window change</td>
+            <td><span class="badge-metric badge-success">Immune</span> Native control objects</td>
+          </tr>
+          <tr>
+            <td><strong>Theme / Skin Changes</strong></td>
+            <td><span class="badge-metric badge-danger">Fails</span> Template mismatch</td>
+            <td><span class="badge-metric badge-success">Immune</span> Evaluates metadata</td>
+          </tr>
+          <tr>
+            <td><strong>Synchronization</strong></td>
+            <td>Fixed sleeps / slow OCR polling</td>
+            <td>Deterministic Win32 events</td>
+          </tr>
+          <tr>
+            <td><strong>Test Maintenance</strong></td>
+            <td>High overhead; huge image libraries</td>
+            <td>Low overhead; durable locators</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="surface-card" style="border-left: 3px solid var(--accent-blue);">
+      <p style="font-size: 0.85rem; color: var(--text-primary);">
+        <strong>Summary:</strong> Citrix renders the app visually as a video stream to the outside, but code executing <em>inside</em> the Citrix interactive session interacts directly with live Windows controls.
+      </p>
+    </div>
+  </section>
+
+  <!-- SECTION 9 -->
+  <section id="sec-9" class="doc-section">
+    <div class="section-badge-wrap">
+      <span class="sec-num">09</span>
+      <h2 class="sec-heading">Citrix Prerequisites</h2>
+    </div>
+    <p class="sec-desc">
+      A transparent breakdown of infrastructure and environment dependencies required within the Citrix VDI/session host.
+    </p>
+
+    <div class="surface-card">
+      <h4 style="font-size: 0.95rem; color: #ffffff; margin-bottom: 12px;">Required in Citrix Session</h4>
+      <ul style="list-style: none; display: flex; flex-direction: column; gap: 8px; font-size: 0.84rem; color: var(--text-secondary);">
+        <li><span style="color: var(--accent-teal);">&check;</span> Ability to run a lightweight executable inside the user session.</li>
+        <li><span style="color: var(--accent-teal);">&check;</span> Agent co-located in the <strong>same interactive session</strong> as FlexTrade.</li>
+        <li><span style="color: var(--accent-teal);">&check;</span> Windows UI Automation core enabled (standard Windows default).</li>
+        <li><span style="color: var(--accent-teal);">&check;</span> Approved local TCP loopback / internal port route for REST commands.</li>
+        <li><span style="color: var(--accent-teal);">&check;</span> Standard user execution permissions (no local admin rights needed).</li>
+      </ul>
+    </div>
+
+    <div class="surface-card" style="border-top: 3px solid var(--accent-muted);">
+      <h4 style="font-size: 0.95rem; color: #ffffff; margin-bottom: 12px;">Explicitly NOT Required</h4>
+      <ul style="list-style: none; display: flex; flex-direction: column; gap: 8px; font-size: 0.84rem; color: var(--text-secondary);">
+        <li><span style="color: var(--accent-rose);">&cross;</span> No Microsoft <code>Inspect.exe</code> dependency.</li>
+        <li><span style="color: var(--accent-rose);">&cross;</span> No OCR engines or screenshot-matching software.</li>
+        <li><span style="color: var(--accent-rose);">&cross;</span> No coordinate-based clicking scripts.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- SECTION 10 -->
+  <section id="sec-10" class="doc-section">
+    <div class="section-badge-wrap">
+      <span class="sec-num">10</span>
+      <h2 class="sec-heading">Agent Deployment Model</h2>
+    </div>
+    <p class="sec-desc">
+      Two runtime models were evaluated for running the agent within corporate Citrix virtual desktops. Option B is strongly recommended.
+    </p>
+
+    <div class="surface-card" style="border: 1px solid var(--accent-blue);">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+        <span style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--accent-cyan); font-weight: 700;">RECOMMENDED MODEL</span>
+        <span class="badge-metric badge-success">Production Target</span>
+      </div>
+      <h4 style="font-size: 1.05rem; color: #ffffff; margin-bottom: 8px;">Option B: Packaged Standalone Binary (agent.exe)</h4>
+      <p style="font-size: 0.82rem; color: var(--text-secondary); margin-bottom: 10px;">
+        Bundle the Python runtime, PyWinAuto, and the REST server into a single executable using PyInstaller.
+      </p>
+      <ul style="list-style: none; font-size: 0.82rem; color: var(--text-secondary); display: flex; flex-direction: column; gap: 4px;">
+        <li><span style="color: var(--accent-teal);">&check;</span> <strong>Zero System Dependencies:</strong> Runs without modifying Citrix server images.</li>
+        <li><span style="color: var(--accent-teal);">&check;</span> <strong>Simple Versioning:</strong> Update via a shared folder or test launcher script.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- SECTION 11 -->
+  <section id="sec-11" class="doc-section">
+    <div class="section-badge-wrap">
+      <span class="sec-num">11</span>
+      <h2 class="sec-heading">Security Architecture</h2>
+    </div>
+    <p class="sec-desc">
+      The automation agent executes inside standard corporate security controls. The communication model uses defensive, least-privilege principles suitable for financial infrastructure.
+    </p>
+
+    <div class="surface-card">
+      <ul style="list-style: none; display: flex; flex-direction: column; gap: 8px; font-size: 0.84rem; color: var(--text-secondary);">
+        <li>&bull; <strong style="color: var(--text-primary);">Internal Network Only:</strong> No external or internet endpoints required.</li>
+        <li>&bull; <strong style="color: var(--text-primary);">Token Authentication:</strong> Dispatched requests require an internal authorization header.</li>
+        <li>&bull; <strong style="color: var(--text-primary);">Least Privilege:</strong> Runs under normal user permissions without elevation.</li>
+        <li>&bull; <strong style="color: var(--text-primary);">Audit Trail:</strong> Logs all dispatched automation commands for compliance review.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- SECTION 12 -->
+  <section id="sec-12" class="doc-section">
+    <div class="section-badge-wrap">
+      <span class="sec-num">12</span>
+      <h2 class="sec-heading">Proof of Concept Roadmap</h2>
+    </div>
+    <p class="sec-desc">
+      A structured, risk-mitigated delivery plan. A formal <strong>Go / No-Go Decision Gate</strong> follows Phase 1, avoiding unnecessary infrastructure spend if UI elements are unexposed.
+    </p>
+
+    <div class="surface-card" style="border-left: 4px solid var(--accent-amber);">
+      <div style="display: flex; justify-content: space-between; align-items: baseline;">
+        <strong style="color: #ffffff; font-size: 0.95rem;">Phase 1: UIA Feasibility Spike</strong>
+        <span style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--accent-amber);">3–5 Days</span>
+      </div>
+      <p style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 4px;">
+        Run a short Python script in an interactive session to verify whether PyWinAuto can enumerate FlexTrade window handles.
+      </p>
+      <div style="margin-top: 8px; font-size: 0.72rem; font-weight: 700; color: #fbbf24;">
+        &bull; DECISION GATE: Terminate or pivot if control tree returns blank.
+      </div>
+    </div>
+
+    <div class="surface-card">
+      <div style="display: flex; justify-content: space-between; align-items: baseline;">
+        <strong style="color: #ffffff; font-size: 0.95rem;">Phase 2: Control Discovery</strong>
+        <span style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted);">1 Week</span>
+      </div>
+      <p style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 4px;">
+        Implement recursive tree inspection routines to dump element properties as JSON.
+      </p>
+    </div>
+
+    <div class="surface-card">
+      <div style="display: flex; justify-content: space-between; align-items: baseline;">
+        <strong style="color: #ffffff; font-size: 0.95rem;">Phase 3: Action Primitives</strong>
+        <span style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted);">1–2 Weeks</span>
+      </div>
+      <p style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 4px;">
+        Harden core typing, clicking, and text-extraction operations.
+      </p>
+    </div>
+
+    <div class="surface-card">
+      <div style="display: flex; justify-content: space-between; align-items: baseline;">
+        <strong style="color: #ffffff; font-size: 0.95rem;">Phase 4: Packaged REST Agent</strong>
+        <span style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted);">1–2 Weeks</span>
+      </div>
+      <p style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 4px;">
+        Package the agent as <code>agent.exe</code> with an embedded REST server.
+      </p>
+    </div>
+
+    <div class="surface-card">
+      <div style="display: flex; justify-content: space-between; align-items: baseline;">
+        <strong style="color: #ffffff; font-size: 0.95rem;">Phase 5: CI/CD Pipeline Integration</strong>
+        <span style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted);">2 Weeks</span>
+      </div>
+      <p style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 4px;">
+        Connect the Pytest framework to the remote agent across the CI pipeline.
+      </p>
+    </div>
+  </section>
+
+  <!-- SECTION 13 -->
+  <section id="sec-13" class="doc-section">
+    <div class="section-badge-wrap">
+      <span class="sec-num">13</span>
+      <h2 class="sec-heading">POC Success Criteria</h2>
+    </div>
+    <p class="sec-desc">
+      Clear, objective criteria to validate the proof of concept before moving to production design.
+    </p>
+
+    <div class="surface-card">
+      <ul style="list-style: none; display: flex; flex-direction: column; gap: 8px; font-size: 0.84rem; color: var(--text-secondary);">
+        <li>&bull; <strong style="color: #ffffff;">Process Discovery:</strong> Agent connects to the running FlexTrade process.</li>
+        <li>&bull; <strong style="color: #ffffff;">Target Identification:</strong> Locates key controls by attributes, not screen coordinates.</li>
+        <li>&bull; <strong style="color: #ffffff;">Reliable Input:</strong> Types text and dispatches keys (e.g., ENTER) reliably.</li>
+        <li>&bull; <strong style="color: #ffffff;">Text Extraction:</strong> Reads cell values directly from result grids.</li>
+        <li>&bull; <strong style="color: #ffffff;">DPI Independence:</strong> Automation runs without changes across different monitor scalings.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- SECTION 14 -->
+  <section id="sec-14" class="doc-section">
+    <div class="section-badge-wrap">
+      <span class="sec-num">14</span>
+      <h2 class="sec-heading">Risks &amp; Mitigations</h2>
+    </div>
+    <p class="sec-desc">
+      A pragmatic review of real-world risks encountered in Citrix-hosted desktop environments, accompanied by mitigation strategies.
+    </p>
+
+    <div class="surface-card">
+      <div style="margin-bottom: 12px;">
+        <strong style="color: var(--accent-rose); font-size: 0.88rem;">Risk: Controls Not Exposed in UIA</strong>
+        <p style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 2px;">
+          <em>Mitigation:</em> Run Phase 1 immediately. If unexposed, stop work on the agent and evaluate vendor-supported APIs.
+        </p>
+      </div>
+      <div style="margin-bottom: 12px;">
+        <strong style="color: var(--accent-amber); font-size: 0.88rem;">Risk: Inactive Session Locks</strong>
+        <p style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 2px;">
+          <em>Mitigation:</em> Apply an approved policy for test service accounts or maintain session heartbeats during test runs.
+        </p>
+      </div>
+      <div>
+        <strong style="color: var(--accent-blue); font-size: 0.88rem;">Risk: UI Selector Drift</strong>
+        <p style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 2px;">
+          <em>Mitigation:</em> Use hierarchical locators that combine control types and parent containers rather than single hardcoded IDs.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 15 -->
+  <section id="sec-15" class="doc-section">
+    <div class="section-badge-wrap">
+      <span class="sec-num">15</span>
+      <h2 class="sec-heading">Recommended Final Design</h2>
+    </div>
+    <p class="sec-desc">
+      The target state diagram below synthesizes the complete strategy: running the automation logic within the remote desktop session while external test frameworks orchestrate execution via clean API calls.
+    </p>
+
+    <div class="diagram-wrapper">
+      <div class="diagram-header">
+        <span class="diagram-title">Figure 15.1: Recommended End-State Pattern</span>
+        <span class="scroll-hint">&larr; Swipe diagram &rarr;</span>
+      </div>
+      <div class="diagram-scroll-pane">
+        <svg class="enterprise-diagram" viewBox="0 0 700 320" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker id="final-arr-m" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8"/>
+            </marker>
+          </defs>
+          <!-- External Framework -->
+          <rect x="150" y="15" width="400" height="65" rx="6" fill="#1e293b" stroke="#3b82f6"/>
+          <text x="170" y="40" fill="#60a5fa" font-size="11" font-weight="700">QA / CI TEST ORCHESTRATOR</text>
+          <text x="170" y="58" fill="#cbd5e1" font-size="10">Pytest Suites &bull; Test Fixtures &bull; Central Reporting</text>
+
+          <!-- Connector -->
+          <path d="M 350 80 L 350 130" fill="none" stroke="#38bdf8" stroke-width="2" marker-end="url(#final-arr-m)"/>
+          <rect x="285" y="93" width="130" height="20" rx="4" fill="#0f172a" stroke="#0284c7"/>
+          <text x="295" y="107" fill="#7dd3fc" font-size="9" font-family="monospace">REST API (HTTP)</text>
+
+          <!-- Citrix Session -->
+          <rect x="50" y="130" width="600" height="175" rx="8" fill="#162238" stroke="#2563eb"/>
+          <text x="70" y="152" fill="#93c5fd" font-size="10" font-weight="700" font-family="monospace">CITRIX INTERACTIVE SESSION</text>
+
+          <!-- Agent -->
+          <rect x="70" y="165" width="250" height="125" rx="4" fill="#111827" stroke="#38bdf8"/>
+          <text x="85" y="188" fill="#38bdf8" font-size="11" font-weight="700">Automation Agent</text>
+          <text x="85" y="208" fill="#cbd5e1" font-size="9">&bull; REST API Server</text>
+          <text x="85" y="226" fill="#cbd5e1" font-size="9">&bull; Locator Engine</text>
+          <text x="85" y="244" fill="#cbd5e1" font-size="9">&bull; PyWinAuto UIA Driver</text>
+
+          <!-- Intra Session Arrow -->
+          <path d="M 320 225 L 375 225" fill="none" stroke="#10b981" stroke-width="2" marker-end="url(#final-arr-m)"/>
+
+          <!-- FlexTrade -->
+          <rect x="375" y="165" width="250" height="125" rx="4" fill="#0f172a" stroke="#10b981"/>
+          <text x="390" y="188" fill="#34d399" font-size="11" font-weight="700">FlexTrade App</text>
+          <text x="390" y="208" fill="#cbd5e1" font-size="9">&bull; TextBox / Input Fields</text>
+          <text x="390" y="226" fill="#cbd5e1" font-size="9">&bull; Search / Action Buttons</text>
+          <text x="390" y="244" fill="#cbd5e1" font-size="9">&bull; Order Blotter Grids</text>
+        </svg>
+      </div>
+    </div>
+
+    <div class="banner-principle">
+      <div class="banner-label">Architecture Recommendation</div>
+      <div class="banner-quote" style="font-size: 1.05rem;">
+        “Run the automation intelligence inside the Citrix session and expose a controlled automation interface to the QA framework.”
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 16 -->
+  <section id="sec-16" class="doc-section">
+    <div class="section-badge-wrap">
+      <span class="sec-num">16</span>
+      <h2 class="sec-heading">Decision &amp; Next Steps</h2>
+    </div>
+    <p class="sec-desc">
+      A concrete, nine-step action plan to move from proposal sign-off to full implementation.
+    </p>
+
+    <div class="surface-card">
+      <ol style="list-style: none; display: flex; flex-direction: column; gap: 10px; font-size: 0.84rem;">
+        <li style="display: flex; gap: 10px;">
+          <strong style="color: var(--accent-blue); font-family: var(--font-mono);">01.</strong>
+          <span>Confirm FlexTrade UIA tree exposure in a test session.</span>
+        </li>
+        <li style="display: flex; gap: 10px;">
+          <strong style="color: var(--accent-blue); font-family: var(--font-mono);">02.</strong>
+          <span>Obtain approval to run the automation agent in test sessions.</span>
+        </li>
+        <li style="display: flex; gap: 10px;">
+          <strong style="color: var(--accent-blue); font-family: var(--font-mono);">03.</strong>
+          <span>Validate a minimal Python + PyWinAuto proof of concept.</span>
+        </li>
+        <li style="display: flex; gap: 10px;">
+          <strong style="color: var(--accent-blue); font-family: var(--font-mono);">04.</strong>
+          <span>Discover and interact with one live FlexTrade control.</span>
+        </li>
+        <li style="display: flex; gap: 10px;">
+          <strong style="color: var(--accent-blue); font-family: var(--font-mono);">05.</strong>
+          <span>Package the agent into a standalone <code>agent.exe</code> binary.</span>
+        </li>
+        <li style="display: flex; gap: 10px;">
+          <strong style="color: var(--accent-blue); font-family: var(--font-mono);">06.</strong>
+          <span>Expose secured REST API endpoints for QA test suites.</span>
+        </li>
+        <li style="display: flex; gap: 10px;">
+          <strong style="color: var(--accent-blue); font-family: var(--font-mono);">07.</strong>
+          <span>Integrate the client library with Pytest and the CI pipeline.</span>
+        </li>
+        <li style="display: flex; gap: 10px;">
+          <strong style="color: var(--accent-blue); font-family: var(--font-mono);">08.</strong>
+          <span>Complete security, network, and infrastructure reviews.</span>
+        </li>
+        <li style="display: flex; gap: 10px;">
+          <strong style="color: var(--accent-blue); font-family: var(--font-mono);">09.</strong>
+          <span>Expand test coverage across critical OMS/EMS trading workflows.</span>
+        </li>
+      </ol>
+    </div>
+
+    <div style="margin-top: 36px; text-align: center; border-top: 1px solid var(--border-dim); padding-top: 20px;">
+      <p style="font-size: 0.75rem; color: var(--text-muted);">
+        Enterprise Solutions Architecture &bull; FlexTrade Automation Working Group
+      </p>
+    </div>
+  </section>
+
+</main>
+
+</body>
+</html>
