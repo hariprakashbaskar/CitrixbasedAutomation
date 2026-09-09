@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>TradeEngine Citrix UI Automation — Lightweight Agent Architecture</title>
+<title>TradeEngine Citrix UI Automation — Hariprakash Baskar</title>
 
 <style>
 :root{
@@ -44,1777 +44,1197 @@ body{
 }
 
 .container{
-  width:min(1450px,94%);
+  width:min(1200px,92%);
   margin:auto;
 }
 
-header{
-  padding:70px 0 45px;
+.hero{
+  padding:80px 0 55px;
   text-align:center;
-  border-bottom:1px solid rgba(255,255,255,.08);
+  border-bottom:1px solid var(--line);
 }
 
 .badge{
   display:inline-block;
-  padding:7px 15px;
+  padding:7px 16px;
   border:1px solid rgba(37,217,255,.4);
-  border-radius:999px;
+  border-radius:30px;
   color:var(--cyan);
-  font-size:13px;
-  letter-spacing:.12em;
-  text-transform:uppercase;
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:1.5px;
+  margin-bottom:20px;
   background:rgba(37,217,255,.06);
 }
 
 h1{
-  font-size:clamp(38px,5vw,68px);
+  font-size:clamp(38px,6vw,72px);
   line-height:1.05;
-  margin:22px auto 18px;
-  max-width:1100px;
+  margin:0;
+  font-weight:800;
+  letter-spacing:-2px;
 }
 
-.gradient{
-  background:linear-gradient(90deg,var(--white),var(--cyan),var(--purple));
-  -webkit-background-clip:text;
-  color:transparent;
+.hero h1 span{
+  color:var(--cyan);
 }
 
 .subtitle{
-  max-width:1000px;
-  margin:auto;
+  max-width:850px;
+  margin:22px auto 0;
   color:var(--muted);
-  font-size:19px;
+  font-size:20px;
 }
 
-.hero-pills{
+.author{
+  margin-top:28px;
   display:flex;
-  flex-wrap:wrap;
+  flex-direction:column;
+  gap:3px;
+}
+
+.author strong{
+  color:var(--white);
+  font-size:20px;
+  font-weight:700;
+}
+
+.author span{
+  color:var(--cyan);
+  font-size:13px;
+  letter-spacing:.5px;
+}
+
+.hero-tags{
+  display:flex;
   justify-content:center;
+  flex-wrap:wrap;
   gap:10px;
   margin-top:28px;
 }
 
-.pill{
+.tag{
+  padding:8px 13px;
+  border-radius:8px;
+  background:var(--panel);
   border:1px solid var(--line);
-  background:rgba(255,255,255,.035);
-  border-radius:999px;
-  padding:9px 15px;
-  color:#cfe4f7;
-  font-size:13px;
+  color:var(--muted);
+  font-size:12px;
 }
 
 section{
-  padding:70px 0;
+  padding:65px 0;
 }
 
-.section-label{
-  color:var(--cyan);
-  font-size:13px;
-  letter-spacing:.16em;
-  text-transform:uppercase;
-  margin-bottom:8px;
+.section-title{
+  font-size:30px;
+  margin:0 0 10px;
 }
 
-h2{
-  font-size:34px;
-  margin:0 0 12px;
-}
-
-h3{
-  margin-top:0;
-}
-
-.lead{
+.section-subtitle{
   color:var(--muted);
-  max-width:1000px;
-  font-size:17px;
+  margin:0 0 30px;
 }
 
-.card{
-  background:
-    linear-gradient(145deg,rgba(255,255,255,.045),rgba(255,255,255,.015));
-  border:1px solid var(--line);
-  border-radius:22px;
-  padding:28px;
-  box-shadow:0 20px 60px rgba(0,0,0,.18);
-}
-
-.grid-2{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:24px;
-}
-
-.grid-3{
+.grid{
   display:grid;
   grid-template-columns:repeat(3,1fr);
   gap:20px;
 }
 
-.grid-4{
+.grid-2{
   display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:18px;
+  grid-template-columns:repeat(2,1fr);
+  gap:22px;
 }
 
-@media(max-width:1000px){
-  .grid-2,.grid-3,.grid-4{
-    grid-template-columns:1fr;
-  }
-}
-
-.kpi{
-  font-size:32px;
-  font-weight:800;
-  color:var(--cyan);
-}
-
-.kpi-label{
-  color:var(--muted);
-  font-size:14px;
-}
-
-.check-list{
-  padding:0;
-  list-style:none;
-}
-
-.check-list li{
-  margin:10px 0;
-  padding-left:25px;
-  position:relative;
-}
-
-.check-list li::before{
-  content:"✓";
-  position:absolute;
-  left:0;
-  color:var(--green);
-  font-weight:bold;
-}
-
-.no-list{
-  padding:0;
-  list-style:none;
-}
-
-.no-list li{
-  margin:10px 0;
-  padding-left:25px;
-  position:relative;
-}
-
-.no-list li::before{
-  content:"×";
-  position:absolute;
-  left:0;
-  color:var(--red);
-  font-weight:bold;
-}
-
-/* Architecture */
-.architecture{
-  background:#06101c;
-  border:1px solid var(--line);
-  border-radius:28px;
-  padding:18px;
-  overflow:auto;
-}
-
-.architecture svg{
-  display:block;
-  width:100%;
-  min-width:1100px;
-  height:auto;
-}
-
-/* Flow */
-.flow{
-  display:flex;
-  align-items:stretch;
-  gap:12px;
-  overflow-x:auto;
-  padding:10px 0 20px;
-}
-
-.flow-step{
-  min-width:210px;
-  flex:1;
-  background:var(--panel);
+.card{
+  background:
+    linear-gradient(145deg,rgba(255,255,255,.025),rgba(255,255,255,.005)),
+    var(--panel);
   border:1px solid var(--line);
   border-radius:18px;
-  padding:20px;
+  padding:25px;
+  box-shadow:0 15px 45px rgba(0,0,0,.18);
 }
 
-.step-number{
-  width:34px;
-  height:34px;
-  border-radius:50%;
+.card h3{
+  margin:0 0 10px;
+  font-size:19px;
+}
+
+.card p{
+  color:var(--muted);
+  margin:0;
+}
+
+.icon{
+  width:42px;
+  height:42px;
   display:flex;
   align-items:center;
   justify-content:center;
-  background:var(--cyan);
-  color:#04101c;
+  border-radius:12px;
+  margin-bottom:17px;
+  background:rgba(37,217,255,.08);
+  border:1px solid rgba(37,217,255,.25);
+  color:var(--cyan);
+  font-weight:800;
+}
+
+.architecture{
+  background:var(--bg2);
+  border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+}
+
+.arch{
+  display:grid;
+  grid-template-columns:1fr 110px 1fr;
+  align-items:center;
+  gap:20px;
+}
+
+.zone{
+  border:1px solid var(--line);
+  border-radius:22px;
+  padding:30px;
+  background:rgba(15,33,54,.75);
+}
+
+.zone.local{
+  border-color:rgba(77,163,255,.45);
+}
+
+.zone.citrix{
+  border-color:rgba(57,230,165,.45);
+}
+
+.zone h3{
+  font-size:23px;
+  margin:0;
+}
+
+.zone-label{
+  color:var(--muted);
+  font-size:12px;
+  margin:5px 0 25px;
+}
+
+.component{
+  padding:16px;
+  margin-top:12px;
+  border-radius:12px;
+  background:var(--panel2);
+  border:1px solid var(--line);
+}
+
+.component strong{
+  display:block;
+  margin-bottom:4px;
+}
+
+.component small{
+  color:var(--muted);
+}
+
+.arrow{
+  text-align:center;
+  color:var(--cyan);
+  font-size:34px;
+}
+
+.flow{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:15px;
+  margin-top:35px;
+}
+
+.step{
+  position:relative;
+  padding:24px;
+  border:1px solid var(--line);
+  border-radius:16px;
+  background:var(--panel);
+}
+
+.step-number{
+  width:32px;
+  height:32px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:50%;
+  background:rgba(37,217,255,.12);
+  border:1px solid rgba(37,217,255,.4);
+  color:var(--cyan);
   font-weight:800;
   margin-bottom:15px;
 }
 
-.arrow{
-  display:flex;
-  align-items:center;
-  color:var(--cyan);
-  font-size:25px;
+.step h3{
+  margin:0 0 8px;
+  font-size:17px;
 }
 
-/* Code */
-pre{
-  background:#040b13;
-  border:1px solid #19344d;
+.step p{
+  color:var(--muted);
+  font-size:14px;
+  margin:0;
+}
+
+.code{
+  background:#050c15;
+  border:1px solid var(--line);
   border-radius:14px;
   padding:20px;
   overflow:auto;
-  color:#d9f4ff;
   font-family:Consolas,Monaco,monospace;
+  color:#bcecff;
   font-size:13px;
+  line-height:1.7;
 }
 
-code{
-  color:#9cecff;
+.code .green{
+  color:var(--green);
 }
 
-/* Tables */
+.code .purple{
+  color:var(--purple);
+}
+
+.code .orange{
+  color:var(--orange);
+}
+
+.code .cyan{
+  color:var(--cyan);
+}
+
+.highlight{
+  border-left:4px solid var(--cyan);
+  padding:20px 24px;
+  background:rgba(37,217,255,.05);
+  border-radius:0 14px 14px 0;
+  margin:25px 0;
+}
+
+.highlight strong{
+  color:var(--cyan);
+}
+
 .table-wrap{
-  overflow:auto;
-  border:1px solid var(--line);
-  border-radius:18px;
+  overflow-x:auto;
 }
 
 table{
   width:100%;
   border-collapse:collapse;
-  min-width:800px;
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:15px;
+  overflow:hidden;
 }
 
 th,td{
-  padding:15px 17px;
-  border-bottom:1px solid rgba(255,255,255,.07);
+  padding:15px 18px;
   text-align:left;
+  border-bottom:1px solid var(--line);
 }
 
 th{
   color:var(--cyan);
-  background:#0c1c2e;
+  background:var(--panel2);
 }
 
 td{
-  color:#c5d7e7;
-}
-
-/* Callout */
-.callout{
-  border-left:4px solid var(--cyan);
-  background:rgba(37,217,255,.06);
-  padding:20px 24px;
-  border-radius:0 15px 15px 0;
-}
-
-.callout.green{
-  border-color:var(--green);
-  background:rgba(57,230,165,.06);
-}
-
-.callout.orange{
-  border-color:var(--orange);
-  background:rgba(255,180,84,.06);
-}
-
-.callout.red{
-  border-color:var(--red);
-  background:rgba(255,107,129,.06);
-}
-
-/* Trees */
-.tree{
-  font-family:Consolas,monospace;
-  white-space:pre;
-  background:#040b13;
-  border:1px solid #19344d;
-  padding:22px;
-  border-radius:16px;
-  color:#bfe9ff;
-  overflow:auto;
-}
-
-/* Footer */
-footer{
-  border-top:1px solid rgba(255,255,255,.08);
-  padding:40px 0 60px;
-  text-align:center;
   color:var(--muted);
 }
 
-/* Small labels */
-.tag{
-  display:inline-block;
-  padding:4px 9px;
-  border-radius:7px;
-  font-size:11px;
-  font-weight:700;
-  margin-right:5px;
-}
-
-.tag-cyan{
-  background:rgba(37,217,255,.12);
-  color:var(--cyan);
-}
-
-.tag-green{
-  background:rgba(57,230,165,.12);
+.good{
   color:var(--green);
+  font-weight:700;
 }
 
-.tag-purple{
-  background:rgba(167,139,250,.12);
-  color:var(--purple);
-}
-
-.tag-orange{
-  background:rgba(255,180,84,.12);
+.warning{
   color:var(--orange);
+  font-weight:700;
 }
 
-/* Timeline */
+.bad{
+  color:var(--red);
+  font-weight:700;
+}
+
+pre{
+  margin:0;
+  white-space:pre-wrap;
+}
+
 .timeline{
   position:relative;
-  margin-top:35px;
-}
-
-.timeline::before{
-  content:"";
-  position:absolute;
-  left:18px;
-  top:0;
-  bottom:0;
-  width:2px;
-  background:var(--line);
+  margin-top:30px;
 }
 
 .timeline-item{
-  position:relative;
-  padding-left:60px;
-  margin-bottom:35px;
+  display:grid;
+  grid-template-columns:120px 1fr;
+  gap:25px;
+  padding:22px 0;
+  border-bottom:1px solid var(--line);
 }
 
-.timeline-dot{
-  position:absolute;
-  left:6px;
-  top:4px;
-  width:26px;
-  height:26px;
-  border-radius:50%;
-  background:var(--cyan);
-  border:5px solid var(--bg);
-}
-
-/* Navigation */
-nav{
-  position:sticky;
-  top:0;
-  z-index:50;
-  backdrop-filter:blur(15px);
-  background:rgba(7,17,31,.82);
-  border-bottom:1px solid rgba(255,255,255,.08);
-}
-
-nav .nav-inner{
-  display:flex;
-  gap:20px;
-  overflow:auto;
-  padding:12px 0;
-}
-
-nav a{
-  color:#a9c0d5;
-  text-decoration:none;
-  white-space:nowrap;
-  font-size:13px;
-}
-
-nav a:hover{
+.timeline-number{
   color:var(--cyan);
+  font-weight:800;
+  font-size:14px;
 }
 
-.highlight{
-  color:var(--cyan);
-  font-weight:700;
+.timeline-item h3{
+  margin:0 0 5px;
 }
 
-.center{
+.timeline-item p{
+  color:var(--muted);
+  margin:0;
+}
+
+.footer{
+  padding:45px 0;
   text-align:center;
+  border-top:1px solid var(--line);
+  color:var(--muted);
 }
 
-.mt{
-  margin-top:25px;
+.footer strong{
+  color:var(--white);
+}
+
+@media(max-width:900px){
+
+  .grid,
+  .grid-2,
+  .flow{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .arch{
+    grid-template-columns:1fr;
+  }
+
+  .arrow{
+    transform:rotate(90deg);
+  }
+}
+
+@media(max-width:600px){
+
+  .grid,
+  .grid-2,
+  .flow{
+    grid-template-columns:1fr;
+  }
+
+  .hero{
+    padding:55px 0 40px;
+  }
+
+  section{
+    padding:45px 0;
+  }
+
+  h1{
+    font-size:40px;
+  }
+
+  .timeline-item{
+    grid-template-columns:1fr;
+    gap:5px;
+  }
 }
 </style>
 </head>
 
 <body>
 
-<!-- =========================================================
-     HEADER
-========================================================= -->
+<!-- =====================================================
+     HERO
+===================================================== -->
 
-<header>
-<div class="container">
+<header class="hero">
 
-<div class="badge">Enterprise Automation Architecture Proposal</div>
+  <div class="container">
 
-<h1>
-TradeEngine Citrix UI Automation
-<br>
-<span class="gradient">Lightweight Agent-Based Architecture</span>
-</h1>
+    <div class="badge">
+      QA AUTOMATION ARCHITECTURE PROPOSAL
+    </div>
 
-<p class="subtitle">
-One-time setup inside Citrix.
-Develop locators, Page Objects and PyTest automation locally.
-Execute real TradeEngine UI controls remotely through a lightweight
-UI Automation agent.
-</p>
+    <h1>
+      TradeEngine <span>Citrix UI Automation</span>
+    </h1>
 
-<div class="hero-pills">
-<span class="pill">One-Time Citrix Setup</span>
-<span class="pill">Lightweight agent.exe</span>
-<span class="pill">UIA / PyWinAuto</span>
-<span class="pill">Locator Driven</span>
-<span class="pill">Local Test Development</span>
-<span class="pill">No OCR</span>
-<span class="pill">No Pixel Automation</span>
-</div>
+    <p class="subtitle">
+      Lightweight PyWinAuto + Windows UI Automation Architecture
+      for locator-driven, maintainable desktop automation
+    </p>
 
-</div>
+    <!-- YOUR NAME -->
+    <div class="author">
+      <strong>Hariprakash Baskar</strong>
+      <span>QA Lead | SDET | Quality Engineering</span>
+    </div>
+
+    <div class="hero-tags">
+      <div class="tag">PyWinAuto</div>
+      <div class="tag">Windows UI Automation</div>
+      <div class="tag">PyTest</div>
+      <div class="tag">Page Object Model</div>
+      <div class="tag">Citrix</div>
+      <div class="tag">REST</div>
+      <div class="tag">No Pixel Automation</div>
+    </div>
+
+  </div>
+
 </header>
 
 
-<!-- =========================================================
-     NAVIGATION
-========================================================= -->
-
-<nav>
-<div class="container nav-inner">
-<a href="#executive">Executive Summary</a>
-<a href="#problem">Current State</a>
-<a href="#principle">Design Principle</a>
-<a href="#architecture">Architecture</a>
-<a href="#locator">Locator Discovery</a>
-<a href="#execution">Execution</a>
-<a href="#agent">Agent</a>
-<a href="#deployment">Deployment</a>
-<a href="#security">Security</a>
-<a href="#files">Files</a>
-<a href="#roadmap">Roadmap</a>
-<a href="#risks">Risks</a>
-<a href="#success">Success Criteria</a>
-<a href="#recommendation">Recommendation</a>
-</div>
-</nav>
-
-
-<!-- =========================================================
-     01 EXECUTIVE SUMMARY
-========================================================= -->
-
-<section id="executive">
-<div class="container">
-
-<div class="section-label">01 — Executive Summary</div>
-
-<h2>Automate the real application — not the Citrix pixels</h2>
-
-<p class="lead">
-TradeEngine is a third-party Windows application delivered through a Citrix
-environment. The objective is to automate the application without modifying
-the vendor application, without installing the complete automation framework
-inside Citrix, and without relying on screen coordinates, OCR or image matching.
-</p>
-
-<div class="grid-4 mt">
-
-<div class="card">
-<div class="kpi">01</div>
-<div class="kpi-label">One-time Citrix setup</div>
-<p>
-Deploy a small <b>agent.exe</b> inside the interactive Citrix session.
-</p>
-</div>
-
-<div class="card">
-<div class="kpi">02</div>
-<div class="kpi-label">Local development</div>
-<p>
-Keep locators, Page Objects, PyTest tests and framework code on the QA machine.
-</p>
-</div>
-
-<div class="card">
-<div class="kpi">03</div>
-<div class="kpi-label">Remote UI execution</div>
-<p>
-The agent executes UIA operations against TradeEngine inside Citrix.
-</p>
-</div>
-
-<div class="card">
-<div class="kpi">04</div>
-<div class="kpi-label">Local reporting</div>
-<p>
-Test results, logs and reports return to the local automation environment.
-</p>
-</div>
-
-</div>
-
-<div class="callout green mt">
-<b>Core proposition:</b>
-The Citrix environment becomes an execution endpoint rather than the
-automation development environment.
-</div>
-
-</div>
-</section>
-
-
-<!-- =========================================================
-     02 CURRENT STATE
-========================================================= -->
-
-<section id="problem">
-<div class="container">
-
-<div class="section-label">02 — Current State</div>
-
-<h2>Why conventional automation struggles with Citrix</h2>
-
-<p class="lead">
-When TradeEngine is launched through Citrix, the local machine normally sees
-the Citrix client/session rather than the underlying Windows control tree of
-the application.
-</p>
-
-<div class="architecture mt">
-
-<svg viewBox="0 0 1200 480" xmlns="http://www.w3.org/2000/svg">
-
-<defs>
-<marker id="arrowBlue" markerWidth="10" markerHeight="10"
-refX="8" refY="3" orient="auto">
-<path d="M0,0 L0,6 L9,3 z" fill="#25d9ff"/>
-</marker>
-</defs>
-
-<rect x="30" y="50" width="330" height="330" rx="25"
-fill="#0f2136" stroke="#25d9ff" stroke-width="2"/>
-
-<text x="195" y="95" fill="#25d9ff"
-font-size="24" text-anchor="middle" font-weight="bold">
-LOCAL MACHINE
-</text>
-
-<rect x="80" y="145" width="230" height="120" rx="18"
-fill="#07111f" stroke="#315a78"/>
-
-<text x="195" y="185" fill="#fff"
-font-size="19" text-anchor="middle">
-Citrix Workspace
-</text>
-
-<text x="195" y="218" fill="#9db4c9"
-font-size="15" text-anchor="middle">
-Remote visual session
-</text>
-
-<text x="195" y="245" fill="#9db4c9"
-font-size="15" text-anchor="middle">
-ICA / video stream
-</text>
-
-<line x1="360" y1="205" x2="840" y2="205"
-stroke="#25d9ff" stroke-width="3"
-marker-end="url(#arrowBlue)"/>
-
-<text x="600" y="180" fill="#25d9ff"
-font-size="17" text-anchor="middle">
-Remote rendering / interaction
-</text>
-
-<rect x="840" y="50" width="330" height="330" rx="25"
-fill="#0f2136" stroke="#a78bfa" stroke-width="2"/>
-
-<text x="1005" y="95" fill="#a78bfa"
-font-size="24" text-anchor="middle" font-weight="bold">
-CITRIX SESSION
-</text>
-
-<rect x="890" y="140" width="230" height="170" rx="18"
-fill="#07111f" stroke="#a78bfa"/>
-
-<text x="1005" y="180" fill="#fff"
-font-size="20" text-anchor="middle">
-TradeEngine
-</text>
-
-<text x="1005" y="220" fill="#9db4c9"
-font-size="15" text-anchor="middle">
-Real Windows controls
-</text>
-
-<text x="1005" y="250" fill="#9db4c9"
-font-size="15" text-anchor="middle">
-UIA / Win32 / WPF
-</text>
-
-<text x="1005" y="280" fill="#ff6b81"
-font-size="15" text-anchor="middle">
-Hidden from local UI tree
-</text>
-
-</svg>
-
-</div>
-
-<div class="grid-3 mt">
-
-<div class="card">
-<h3>Pixel / Image Automation</h3>
-<p>
-Coordinates, screenshots and OCR attempt to infer what is displayed.
-</p>
-</div>
-
-<div class="card">
-<h3>Maintenance Problem</h3>
-<p>
-DPI, resolution, window position, themes and session changes can break tests.
-</p>
-</div>
-
-<div class="card">
-<h3>Target State</h3>
-<p>
-Execute inside the Citrix Windows session and access the real UIA control tree.
-</p>
-</div>
-
-</div>
-
-</div>
-</section>
-
-
-<!-- =========================================================
-     03 DESIGN PRINCIPLE
-========================================================= -->
-
-<section id="principle">
-<div class="container">
-
-<div class="section-label">03 — Design Principle</div>
-
-<h2>Separate automation ownership from application execution</h2>
-
-<div class="grid-2">
-
-<div class="card">
-<h3>Local Machine = Automation Intelligence</h3>
-
-<ul class="check-list">
-<li>Locator Inspector</li>
-<li>Locator repository</li>
-<li>Page Object Model</li>
-<li>PyTest test scenarios</li>
-<li>Test data</li>
-<li>Framework utilities</li>
-<li>Logging</li>
-<li>HTML / Allure reports</li>
-<li>CI/CD integration</li>
-</ul>
-</div>
-
-<div class="card">
-<h3>Citrix Machine = Lightweight Execution Bridge</h3>
-
-<ul class="check-list">
-<li>One-time agent installation</li>
-<li>Bundled Python/UIA runtime</li>
-<li>PyWinAuto execution</li>
-<li>UIA control discovery</li>
-<li>Click / type / read / wait operations</li>
-<li>JSON request/response</li>
-<li>No test suite storage required</li>
-<li>No Page Objects required</li>
-<li>No reporting framework required</li>
-</ul>
-</div>
-
-</div>
-
-<div class="callout mt">
-<b>Important technical clarification:</b>
-The automation framework and source code remain local. However, the
-actual PyWinAuto/UIA operation must execute inside the Citrix Windows
-session because that is where the TradeEngine controls exist.
-The lightweight agent therefore contains the minimum UI automation runtime.
-</div>
-
-</div>
-</section>
-
-
-<!-- =========================================================
-     04 TARGET ARCHITECTURE
-========================================================= -->
-
-<section id="architecture">
-<div class="container">
-
-<div class="section-label">04 — Target Architecture</div>
-
-<h2>One-time Citrix agent + local automation framework</h2>
-
-<p class="lead">
-The target architecture creates a clean boundary between the QA automation
-environment and the third-party Citrix application environment.
-</p>
-
-<div class="architecture mt">
-
-<svg viewBox="0 0 1400 720"
-xmlns="http://www.w3.org/2000/svg">
-
-<defs>
-
-<marker id="arrowCyan" markerWidth="12" markerHeight="12"
-refX="10" refY="4" orient="auto">
-<path d="M0,0 L0,8 L11,4 z" fill="#25d9ff"/>
-</marker>
-
-<marker id="arrowGreen" markerWidth="12" markerHeight="12"
-refX="10" refY="4" orient="auto">
-<path d="M0,0 L0,8 L11,4 z" fill="#39e6a5"/>
-</marker>
-
-</defs>
-
-<!-- LOCAL -->
-
-<rect x="35" y="35" width="500" height="610" rx="28"
-fill="#0d2034" stroke="#25d9ff" stroke-width="2"/>
-
-<text x="285" y="80"
-fill="#25d9ff"
-font-size="28"
-font-weight="bold"
-text-anchor="middle">
-LOCAL QA MACHINE
-</text>
-
-<text x="285" y="108"
-fill="#9db4c9"
-font-size="15"
-text-anchor="middle">
-Development • Locator Capture • Test Execution • Reporting
-</text>
-
-<!-- Local boxes -->
-
-<rect x="80" y="140" width="410" height="85" rx="16"
-fill="#07111f" stroke="#315a78"/>
-
-<text x="105" y="172" fill="#fff" font-size="20"
-font-weight="bold">
-Locator Inspector
-</text>
-
-<text x="105" y="202" fill="#9db4c9" font-size="14">
-Inspect control → receive UIA properties → save locator
-</text>
-
-<rect x="80" y="250" width="410" height="85" rx="16"
-fill="#07111f" stroke="#315a78"/>
-
-<text x="105" y="282" fill="#fff" font-size="20"
-font-weight="bold">
-Locator Repository
-</text>
-
-<text x="105" y="312" fill="#9db4c9" font-size="14">
-JSON locators • reusable selectors • version controlled
-</text>
-
-<rect x="80" y="360" width="410" height="85" rx="16"
-fill="#07111f" stroke="#315a78"/>
-
-<text x="105" y="392" fill="#fff" font-size="20"
-font-weight="bold">
-Page Objects
-</text>
-
-<text x="105" y="422" fill="#9db4c9" font-size="14">
-LoginPage • SearchPage • TradePage • OrderPage
-</text>
-
-<rect x="80" y="470" width="410" height="115" rx="16"
-fill="#07111f" stroke="#315a78"/>
-
-<text x="105" y="502" fill="#fff" font-size="20"
-font-weight="bold">
-PyTest Automation
-</text>
-
-<text x="105" y="532" fill="#9db4c9" font-size="14">
-Business scenarios • Test data • Assertions
-</text>
-
-<text x="105" y="558" fill="#39e6a5" font-size="14">
-HTML / Allure reports generated locally
-</text>
-
-
-<!-- CENTER -->
-
-<rect x="570" y="35" width="260" height="610" rx="28"
-fill="#091522" stroke="#315a78"/>
-
-<text x="700" y="80"
-fill="#fff"
-font-size="23"
-font-weight="bold"
-text-anchor="middle">
-SECURE API
-</text>
-
-<text x="700" y="107"
-fill="#9db4c9"
-font-size="14"
-text-anchor="middle">
-Controlled command channel
-</text>
-
-<rect x="600" y="155" width="200" height="105" rx="15"
-fill="#07111f" stroke="#25d9ff"/>
-
-<text x="700" y="188" fill="#25d9ff"
-font-size="18" text-anchor="middle"
-font-weight="bold">
-1. DISCOVERY
-</text>
-
-<text x="700" y="217" fill="#c5d7e7"
-font-size="13" text-anchor="middle">
-POST /inspect
-</text>
-
-<text x="700" y="239" fill="#c5d7e7"
-font-size="13" text-anchor="middle">
-Return UIA JSON
-</text>
-
-<rect x="600" y="300" width="200" height="135" rx="15"
-fill="#07111f" stroke="#39e6a5"/>
-
-<text x="700" y="333" fill="#39e6a5"
-font-size="18" text-anchor="middle"
-font-weight="bold">
-2. EXECUTION
-</text>
-
-<text x="700" y="362" fill="#c5d7e7"
-font-size="13" text-anchor="middle">
-POST /click
-</text>
-
-<text x="700" y="384" fill="#c5d7e7"
-font-size="13" text-anchor="middle">
-POST /type
-</text>
-
-<text x="700" y="406" fill="#c5d7e7"
-font-size="13" text-anchor="middle">
-POST /get-text
-</text>
-
-<rect x="600" y="475" width="200" height="105" rx="15"
-fill="#07111f" stroke="#a78bfa"/>
-
-<text x="700" y="508" fill="#a78bfa"
-font-size="18" text-anchor="middle"
-font-weight="bold">
-SECURITY
-</text>
-
-<text x="700" y="537" fill="#c5d7e7"
-font-size="13" text-anchor="middle">
-HTTPS / Auth
-</text>
-
-<text x="700" y="559" fill="#c5d7e7"
-font-size="13" text-anchor="middle">
-Firewall / Audit
-</text>
-
-
-<!-- CITRIX -->
-
-<rect x="865" y="35" width="500" height="610" rx="28"
-fill="#101d32" stroke="#a78bfa" stroke-width="2"/>
-
-<text x="1115" y="80"
-fill="#a78bfa"
-font-size="28"
-font-weight="bold"
-text-anchor="middle">
-CITRIX ENVIRONMENT
-</text>
-
-<text x="1115" y="108"
-fill="#9db4c9"
-font-size="15"
-text-anchor="middle">
-One-time lightweight deployment
-</text>
-
-<rect x="900" y="140" width="430" height="465"
-rx="22"
-fill="#07111f"
-stroke="#315a78"/>
-
-<text x="1115" y="175"
-fill="#fff"
-font-size="18"
-font-weight="bold"
-text-anchor="middle">
-Interactive Windows Session
-</text>
-
-<!-- Agent -->
-
-<rect x="925" y="205" width="185" height="265"
-rx="18"
-fill="#0b2a29"
-stroke="#39e6a5"
-stroke-width="2"/>
-
-<text x="1017" y="240"
-fill="#39e6a5"
-font-size="19"
-font-weight="bold"
-text-anchor="middle">
-agent.exe
-</text>
-
-<text x="1017" y="270"
-fill="#fff"
-font-size="14"
-text-anchor="middle">
-Automation Agent
-</text>
-
-<text x="950" y="310"
-fill="#bfe8db"
-font-size="13">
-REST API
-</text>
-
-<text x="950" y="338"
-fill="#bfe8db"
-font-size="13">
-UIA Inspector
-</text>
-
-<text x="950" y="366"
-fill="#bfe8db"
-font-size="13">
-PyWinAuto
-</text>
-
-<text x="950" y="394"
-fill="#bfe8db"
-font-size="13">
-Click / Type / Read
-</text>
-
-<text x="950" y="422"
-fill="#bfe8db"
-font-size="13">
-JSON responses
-</text>
-
-<text x="1017" y="450"
-fill="#39e6a5"
-font-size="12"
-text-anchor="middle">
-Normal user session
-</text>
-
-
-<!-- TradeEngine -->
-
-<rect x="1140" y="205" width="165" height="265"
-rx="18"
-fill="#221d3c"
-stroke="#a78bfa"
-stroke-width="2"/>
-
-<text x="1222" y="240"
-fill="#a78bfa"
-font-size="18"
-font-weight="bold"
-text-anchor="middle">
-TradeEngine
-</text>
-
-<text x="1160" y="275"
-fill="#fff"
-font-size="13">
-Customer ID
-</text>
-
-<rect x="1160" y="286" width="125" height="28"
-rx="5"
-fill="#e9f4ff"/>
-
-<text x="1170" y="305"
-fill="#172b3e"
-font-size="12">
-ABC123
-</text>
-
-<text x="1160" y="340"
-fill="#fff"
-font-size="13">
-Search
-</text>
-
-<rect x="1160" y="350" width="125" height="30"
-rx="5"
-fill="#4da3ff"/>
-
-<text x="1222" y="370"
-fill="#fff"
-font-size="12"
-text-anchor="middle">
-SEARCH
-</text>
-
-<rect x="1160" y="400" width="125" height="42"
-rx="5"
-fill="#07111f"
-stroke="#315a78"/>
-
-<text x="1222" y="426"
-fill="#9db4c9"
-font-size="11"
-text-anchor="middle">
-Result Grid
-</text>
-
-<text x="1222" y="460"
-fill="#39e6a5"
-font-size="11"
-text-anchor="middle">
-UIA Controls
-</text>
-
-
-<!-- arrows -->
-
-<line x1="535" y1="180" x2="865" y2="180"
-stroke="#25d9ff" stroke-width="3"
-marker-end="url(#arrowCyan)"/>
-
-<line x1="865" y1="215" x2="535" y2="215"
-stroke="#39e6a5" stroke-width="3"
-marker-end="url(#arrowGreen)"/>
-
-<text x="700" y="164"
-fill="#25d9ff"
-font-size="13"
-text-anchor="middle">
-REST request
-</text>
-
-<text x="700" y="240"
-fill="#39e6a5"
-font-size="13"
-text-anchor="middle">
-JSON response
-</text>
-
-<line x1="535" y1="385" x2="865" y2="385"
-stroke="#25d9ff" stroke-width="3"
-marker-end="url(#arrowCyan)"/>
-
-<line x1="865" y1="425" x2="535" y2="425"
-stroke="#39e6a5" stroke-width="3"
-marker-end="url(#arrowGreen)"/>
-
-<text x="700" y="369"
-fill="#25d9ff"
-font-size="13"
-text-anchor="middle">
-Automation commands
-</text>
-
-<text x="700" y="450"
-fill="#39e6a5"
-font-size="13"
-text-anchor="middle">
-Execution result
-</text>
-
-<line x1="1110" y1="335" x2="1140" y2="335"
-stroke="#39e6a5" stroke-width="3"
-marker-end="url(#arrowGreen)"/>
-
-<text x="1125" y="325"
-fill="#39e6a5"
-font-size="11"
-text-anchor="middle">
-UIA
-</text>
-
-</svg>
-
-</div>
-
-</div>
-</section>
-
-
-<!-- =========================================================
-     05 LOCATOR DISCOVERY
-========================================================= -->
-
-<section id="locator">
-<div class="container">
-
-<div class="section-label">05 — Locator Discovery</div>
-
-<h2>Capture real UIA properties from TradeEngine</h2>
-
-<p class="lead">
-The locator tool runs locally, but the actual inspection happens inside the
-Citrix session through the lightweight agent.
-</p>
-
-<div class="flow mt">
-
-<div class="flow-step">
-<div class="step-number">1</div>
-<h3>Open TradeEngine</h3>
-<p>
-Launch the third-party application inside the Citrix interactive session.
-</p>
-</div>
-
-<div class="arrow">→</div>
-
-<div class="flow-step">
-<div class="step-number">2</div>
-<h3>Select Control</h3>
-<p>
-Click/focus the required control, such as the Search box.
-</p>
-</div>
-
-<div class="arrow">→</div>
-
-<div class="flow-step">
-<div class="step-number">3</div>
-<h3>Inspect</h3>
-<p>
-Local Locator Inspector sends an inspection request to the agent.
-</p>
-</div>
-
-<div class="arrow">→</div>
-
-<div class="flow-step">
-<div class="step-number">4</div>
-<h3>UIA Discovery</h3>
-<p>
-Agent queries the live Windows UI Automation tree.
-</p>
-</div>
-
-<div class="arrow">→</div>
-
-<div class="flow-step">
-<div class="step-number">5</div>
-<h3>Return JSON</h3>
-<p>
-Actual properties are returned to the local machine.
-</p>
-</div>
-
-<div class="arrow">→</div>
-
-<div class="flow-step">
-<div class="step-number">6</div>
-<h3>Save Locator</h3>
-<p>
-Store the locator locally and reuse it in Page Objects.
-</p>
-</div>
-
-</div>
-
-
-<div class="grid-2 mt">
-
-<div class="card">
-
-<h3>Example UIA Response</h3>
-
-<pre>{
-  "name": "Search",
-  "control_type": "Edit",
-  "automation_id": "txtSearch",
-  "class_name": "TextBox",
-  "framework_id": "WPF",
-  "enabled": true,
-  "visible": true
-}</pre>
-
-</div>
-
-<div class="card">
-
-<h3>Local Locator Repository</h3>
-
-<pre>{
-  "search_box": {
-    "automation_id": "txtSearch",
-    "control_type": "Edit"
-  },
-
-  "search_button": {
-    "automation_id": "btnSearch",
-    "control_type": "Button"
-  }
-}</pre>
-
-</div>
-
-</div>
-
-
-<div class="callout orange mt">
-<b>Feasibility Gate:</b>
-The locator discovery process depends on TradeEngine exposing useful
-Windows UI Automation metadata. If the application exposes only an opaque
-custom-rendered surface, vendor-supported APIs or integration mechanisms
-must be evaluated instead.
-</div>
-
-</div>
-</section>
-
-
-<!-- =========================================================
-     06 PAGE OBJECT / TEST
-========================================================= -->
+<!-- =====================================================
+     EXECUTIVE SUMMARY
+===================================================== -->
 
 <section>
-<div class="container">
 
-<div class="section-label">06 — Local Automation Framework</div>
+  <div class="container">
 
-<h2>Locators and test logic remain local</h2>
+    <h2 class="section-title">
+      Executive Summary
+    </h2>
 
-<div class="grid-2">
+    <p class="section-subtitle">
+      A lightweight architecture that keeps automation development
+      and test assets on the local machine while executing UI actions
+      inside the Citrix Windows session.
+    </p>
 
-<div class="card">
+    <div class="highlight">
 
-<h3>Page Object</h3>
+      <strong>Core Design Principle</strong>
 
-<pre>class SearchPage:
+      <br>
+
+      The automation framework, test scripts, Page Objects and locator
+      repository remain on the local QA workstation. Only a lightweight
+      execution agent is deployed inside the Citrix session.
+      
+    </div>
+
+    <div class="grid">
+
+      <div class="card">
+
+        <div class="icon">01</div>
+
+        <h3>One-Time Citrix Setup</h3>
+
+        <p>
+          Deploy a lightweight agent executable inside the Citrix
+          environment. The complete automation framework does not
+          need to be installed there.
+        </p>
+
+      </div>
+
+
+      <div class="card">
+
+        <div class="icon">02</div>
+
+        <h3>Real UIA Locators</h3>
+
+        <p>
+          Use PyWinAuto with the UIA backend to inspect actual Windows
+          controls instead of relying on coordinates, screenshots,
+          OCR or image recognition.
+        </p>
+
+      </div>
+
+
+      <div class="card">
+
+        <div class="icon">03</div>
+
+        <h3>Local Development</h3>
+
+        <p>
+          Locator files, Page Objects, PyTest scenarios, test data
+          and reports remain within the local automation project.
+        </p>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =====================================================
+     CURRENT CHALLENGE
+===================================================== -->
+
+<section class="architecture">
+
+  <div class="container">
+
+    <h2 class="section-title">
+      Current Challenge
+    </h2>
+
+    <p class="section-subtitle">
+      Why traditional local desktop automation cannot directly
+      inspect a Citrix-hosted application.
+    </p>
+
+    <div class="grid-2">
+
+      <div class="card">
+
+        <div class="icon">L</div>
+
+        <h3>Local Machine</h3>
+
+        <p>
+          The QA workstation primarily receives the Citrix
+          presentation/ICA stream. The local operating system
+          does not necessarily have direct access to the actual
+          TradeEngine Windows control tree.
+        </p>
+
+      </div>
+
+
+      <div class="card">
+
+        <div class="icon">C</div>
+
+        <h3>Citrix Session</h3>
+
+        <p>
+          TradeEngine and its Windows controls actually execute
+          inside the remote Windows session. Therefore UIA inspection
+          must happen within that session.
+        </p>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =====================================================
+     TARGET ARCHITECTURE
+===================================================== -->
+
+<section>
+
+  <div class="container">
+
+    <h2 class="section-title">
+      Target Architecture
+    </h2>
+
+    <p class="section-subtitle">
+      Separate development from remote UI execution.
+    </p>
+
+
+    <div class="arch">
+
+      <!-- LOCAL -->
+
+      <div class="zone local">
+
+        <h3>Local QA Machine</h3>
+
+        <div class="zone-label">
+          DEVELOPMENT • LOCATORS • TESTS • REPORTING
+        </div>
+
+        <div class="component">
+
+          <strong>Locator Inspector</strong>
+
+          <small>
+            Capture actual UIA properties from the Citrix session.
+          </small>
+
+        </div>
+
+
+        <div class="component">
+
+          <strong>Locator Repository</strong>
+
+          <small>
+            JSON-based reusable locator definitions.
+          </small>
+
+        </div>
+
+
+        <div class="component">
+
+          <strong>Page Classes</strong>
+
+          <small>
+            LoginPage.py, TradePage.py, OrderPage.py
+          </small>
+
+        </div>
+
+
+        <div class="component">
+
+          <strong>PyTest</strong>
+
+          <small>
+            Test scenarios, assertions and reports.
+          </small>
+
+        </div>
+
+
+        <div class="component">
+
+          <strong>Agent Client</strong>
+
+          <small>
+            Sends commands to the Citrix-side agent.
+          </small>
+
+        </div>
+
+      </div>
+
+
+      <!-- COMMUNICATION -->
+
+      <div class="arrow">
+
+        ⇄
+
+      </div>
+
+
+      <!-- CITRIX -->
+
+      <div class="zone citrix">
+
+        <h3>Citrix Environment</h3>
+
+        <div class="zone-label">
+          ONE-TIME SETUP • INTERACTIVE WINDOWS SESSION
+        </div>
+
+
+        <div class="component">
+
+          <strong>agent.exe</strong>
+
+          <small>
+            Lightweight REST service running inside the
+            interactive Citrix session.
+          </small>
+
+        </div>
+
+
+        <div class="component">
+
+          <strong>PyWinAuto</strong>
+
+          <small>
+            Windows UI automation using backend="uia".
+          </small>
+
+        </div>
+
+
+        <div class="component">
+
+          <strong>UI Automation</strong>
+
+          <small>
+            Finds real Windows controls and their properties.
+          </small>
+
+        </div>
+
+
+        <div class="component">
+
+          <strong>TradeEngine</strong>
+
+          <small>
+            Third-party Windows desktop application.
+          </small>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- COMMUNICATION FLOW -->
+
+    <div class="flow">
+
+      <div class="step">
+
+        <div class="step-number">1</div>
+
+        <h3>Capture Locator</h3>
+
+        <p>
+          Focus a TradeEngine control and request its UIA
+          properties through the agent.
+        </p>
+
+      </div>
+
+
+      <div class="step">
+
+        <div class="step-number">2</div>
+
+        <h3>Store Locator</h3>
+
+        <p>
+          Save AutomationId, Name, ControlType and other
+          useful properties locally.
+        </p>
+
+      </div>
+
+
+      <div class="step">
+
+        <div class="step-number">3</div>
+
+        <h3>Execute Test</h3>
+
+        <p>
+          PyTest sends click, type, read and wait commands
+          to the Citrix-side agent.
+        </p>
+
+      </div>
+
+
+      <div class="step">
+
+        <div class="step-number">4</div>
+
+        <h3>Return Result</h3>
+
+        <p>
+          The agent returns execution results and the local
+          framework generates the report.
+        </p>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =====================================================
+     LOCATOR DISCOVERY
+===================================================== -->
+
+<section class="architecture">
+
+  <div class="container">
+
+    <h2 class="section-title">
+      UIA Locator Discovery
+    </h2>
+
+    <p class="section-subtitle">
+      Capture real control metadata rather than coordinates or pixels.
+    </p>
+
+
+    <div class="grid-2">
+
+      <div class="card">
+
+        <h3>Example TradeEngine Control</h3>
+
+        <div class="code">
+
+<pre>
+TradeEngine
+   │
+   └── Search
+       ├── Name          = "Search"
+       ├── ControlType   = "Button"
+       ├── AutomationId = "btnSearch"
+       ├── ClassName     = "Button"
+       ├── FrameworkId   = "WPF"
+       ├── Enabled       = True
+       └── Visible       = True
+</pre>
+
+        </div>
+
+      </div>
+
+
+      <div class="card">
+
+        <h3>Stored Locator</h3>
+
+        <div class="code">
+
+<pre>{
+  <span class="green">"name"</span>: <span class="orange">"Search"</span>,
+  <span class="green">"control_type"</span>: <span class="orange">"Button"</span>,
+  <span class="green">"automation_id"</span>: <span class="orange">"btnSearch"</span>,
+  <span class="green">"class_name"</span>: <span class="orange">"Button"</span>,
+  <span class="green">"backend"</span>: <span class="orange">"uia"</span>
+}</pre>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =====================================================
+     PAGE OBJECT MODEL
+===================================================== -->
+
+<section>
+
+  <div class="container">
+
+    <h2 class="section-title">
+      Local Page Object Model
+    </h2>
+
+    <p class="section-subtitle">
+      Locators are separated from business scenarios.
+    </p>
+
+
+    <div class="code">
+
+<pre>
+<span class="purple">class</span> SearchPage:
 
     SEARCH_BOX = {
-        "automation_id": "txtSearch",
-        "control_type": "Edit"
+        <span class="green">"automation_id"</span>: <span class="orange">"txtSearch"</span>,
+        <span class="green">"control_type"</span>: <span class="orange">"Edit"</span>
     }
 
     SEARCH_BUTTON = {
-        "automation_id": "btnSearch",
-        "control_type": "Button"
+        <span class="green">"automation_id"</span>: <span class="orange">"btnSearch"</span>,
+        <span class="green">"control_type"</span>: <span class="orange">"Button"</span>
     }
 
-    def enter_search(self, value):
+
+    <span class="purple">def</span> enter_search(self, value):
+
         self.agent.type(
             locator=self.SEARCH_BOX,
             value=value
         )
 
-    def click_search(self):
+
+    <span class="purple">def</span> click_search(self):
+
         self.agent.click(
             locator=self.SEARCH_BUTTON
-        )</pre>
+        )
+</pre>
 
-</div>
+    </div>
 
-<div class="card">
+  </div>
 
-<h3>PyTest Scenario</h3>
+</section>
 
-<pre>def test_tradeengine_search():
 
-    search_page.enter_search(
-        "ABC123"
-    )
+<!-- =====================================================
+     PYTEST
+===================================================== -->
+
+<section class="architecture">
+
+  <div class="container">
+
+    <h2 class="section-title">
+      PyTest Execution
+    </h2>
+
+    <p class="section-subtitle">
+      Test scenarios remain completely readable and business-focused.
+    </p>
+
+
+    <div class="code">
+
+<pre>
+<span class="purple">def</span> test_search_trade():
+
+    search_page.enter_search(<span class="orange">"ABC123"</span>)
 
     search_page.click_search()
 
     result = search_page.get_result()
 
-    assert result == "FILLED"</pre>
+    <span class="purple">assert</span> result == <span class="orange">"FILLED"</span>
+</pre>
 
-</div>
+    </div>
 
-</div>
 
-<div class="callout green mt">
-<b>Developer experience:</b>
-The QA engineer writes normal Python/Page Object/PyTest automation locally.
-The test does not need to understand Citrix internals.
-</div>
+    <div class="highlight">
 
-</div>
+      <strong>Important:</strong>
+
+      The PyTest process remains on the local machine.
+      The actual interaction with TradeEngine is executed
+      inside the Citrix interactive session by the lightweight agent.
+
+    </div>
+
+  </div>
+
 </section>
 
 
-<!-- =========================================================
-     07 EXECUTION
-========================================================= -->
+<!-- =====================================================
+     EXECUTION FLOW
+===================================================== -->
 
-<section id="execution">
-<div class="container">
+<section>
 
-<div class="section-label">07 — Test Execution</div>
+  <div class="container">
 
-<h2>Local PyTest → Agent → TradeEngine</h2>
-
-<p class="lead">
-The test remains on the local machine. The agent receives only the required
-automation command and executes it against the real UI inside Citrix.
-</p>
-
-<div class="architecture mt">
-
-<svg viewBox="0 0 1250 430"
-xmlns="http://www.w3.org/2000/svg">
-
-<defs>
-<marker id="flowArrow" markerWidth="12" markerHeight="12"
-refX="10" refY="4" orient="auto">
-<path d="M0,0 L0,8 L11,4 z" fill="#25d9ff"/>
-</marker>
-</defs>
-
-<rect x="30" y="55" width="250" height="270"
-rx="22" fill="#0f2136" stroke="#25d9ff"/>
-
-<text x="155" y="100"
-fill="#25d9ff" font-size="24"
-font-weight="bold" text-anchor="middle">
-LOCAL
-</text>
-
-<text x="155" y="145"
-fill="#fff" font-size="18"
-text-anchor="middle">
-PyTest
-</text>
-
-<text x="155" y="180"
-fill="#9db4c9" font-size="15"
-text-anchor="middle">
-Page Object
-</text>
-
-<text x="155" y="215"
-fill="#9db4c9" font-size="15"
-text-anchor="middle">
-Locator
-</text>
-
-<text x="155" y="250"
-fill="#9db4c9" font-size="15"
-text-anchor="middle">
-Agent Client
-</text>
+    <h2 class="section-title">
+      End-to-End Execution Flow
+    </h2>
 
 
-<rect x="500" y="55" width="250" height="270"
-rx="22" fill="#0f2136" stroke="#39e6a5"/>
+    <div class="timeline">
 
-<text x="625" y="100"
-fill="#39e6a5" font-size="24"
-font-weight="bold" text-anchor="middle">
-CITRIX AGENT
-</text>
+      <div class="timeline-item">
 
-<text x="625" y="145"
-fill="#fff" font-size="18"
-text-anchor="middle">
-Receive Command
-</text>
+        <div class="timeline-number">
+          STEP 01
+        </div>
 
-<text x="625" y="180"
-fill="#9db4c9" font-size="15"
-text-anchor="middle">
-Resolve Locator
-</text>
+        <div>
 
-<text x="625" y="215"
-fill="#9db4c9" font-size="15"
-text-anchor="middle">
-PyWinAuto / UIA
-</text>
+          <h3>Open TradeEngine</h3>
 
-<text x="625" y="250"
-fill="#9db4c9" font-size="15"
-text-anchor="middle">
-Return Result
-</text>
+          <p>
+            User opens TradeEngine inside the Citrix session.
+          </p>
+
+        </div>
+
+      </div>
 
 
-<rect x="970" y="55" width="250" height="270"
-rx="22" fill="#17172e" stroke="#a78bfa"/>
+      <div class="timeline-item">
 
-<text x="1095" y="100"
-fill="#a78bfa" font-size="24"
-font-weight="bold"
-text-anchor="middle">
-TRADEENGINE
-</text>
+        <div class="timeline-number">
+          STEP 02
+        </div>
 
-<text x="1095" y="145"
-fill="#fff" font-size="18"
-text-anchor="middle">
-Real UI
-</text>
+        <div>
 
-<text x="1095" y="180"
-fill="#9db4c9" font-size="15"
-text-anchor="middle">
-Button
-</text>
+          <h3>Capture UIA Locator</h3>
 
-<text x="1095" y="215"
-fill="#9db4c9" font-size="15"
-text-anchor="middle">
-Edit
-</text>
+          <p>
+            Locator Inspector requests information from
+            agent.exe and PyWinAuto inspects the UIA tree.
+          </p>
 
-<text x="1095" y="250"
-fill="#9db4c9" font-size="15"
-text-anchor="middle">
-Grid
-</text>
+        </div>
+
+      </div>
 
 
-<line x1="280" y1="165" x2="500" y2="165"
-stroke="#25d9ff" stroke-width="4"
-marker-end="url(#flowArrow)"/>
+      <div class="timeline-item">
 
-<text x="390" y="145"
-fill="#25d9ff"
-font-size="14"
-text-anchor="middle">
-REST command
-</text>
+        <div class="timeline-number">
+          STEP 03
+        </div>
 
+        <div>
 
-<line x1="750" y1="165" x2="970" y2="165"
-stroke="#25d9ff" stroke-width="4"
-marker-end="url(#flowArrow)"/>
+          <h3>Save Locator Locally</h3>
 
-<text x="860" y="145"
-fill="#25d9ff"
-font-size="14"
-text-anchor="middle">
-UIA action
-</text>
+          <p>
+            The locator is normalized and stored in the
+            local JSON repository.
+          </p>
+
+        </div>
+
+      </div>
 
 
-<line x1="970" y1="270" x2="750" y2="270"
-stroke="#39e6a5" stroke-width="3"
-marker-end="url(#flowArrow)"/>
+      <div class="timeline-item">
 
-<line x1="500" y1="270" x2="280" y2="270"
-stroke="#39e6a5" stroke-width="3"
-marker-end="url(#flowArrow)"/>
+        <div class="timeline-number">
+          STEP 04
+        </div>
 
-<text x="860" y="300"
-fill="#39e6a5"
-font-size="14"
-text-anchor="middle">
-Execution result
-</text>
+        <div>
 
-<text x="390" y="300"
-fill="#39e6a5"
-font-size="14"
-text-anchor="middle">
-Result to PyTest
-</text>
+          <h3>Develop Page Object</h3>
 
-</svg>
+          <p>
+            Page classes consume the locator definitions.
+          </p>
 
-</div>
+        </div>
 
-</div>
+      </div>
+
+
+      <div class="timeline-item">
+
+        <div class="timeline-number">
+          STEP 05
+        </div>
+
+        <div>
+
+          <h3>Run PyTest</h3>
+
+          <p>
+            Test execution starts from the local workstation.
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div class="timeline-item">
+
+        <div class="timeline-number">
+          STEP 06
+        </div>
+
+        <div>
+
+          <h3>Execute Inside Citrix</h3>
+
+          <p>
+            Agent.exe resolves the locator and performs the
+            UI action through PyWinAuto/UIA.
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div class="timeline-item">
+
+        <div class="timeline-number">
+          STEP 07
+        </div>
+
+        <div>
+
+          <h3>Return Result</h3>
+
+          <p>
+            Execution status and retrieved values are returned
+            to the local framework.
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div class="timeline-item">
+
+        <div class="timeline-number">
+          STEP 08
+        </div>
+
+        <div>
+
+          <h3>Generate Report</h3>
+
+          <p>
+            HTML or Allure reports are generated locally.
+          </p>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
 </section>
 
 
-<!-- =========================================================
-     08 AGENT
-========================================================= -->
+<!-- =====================================================
+     PROJECT STRUCTURE
+===================================================== -->
 
-<section id="agent">
-<div class="container">
+<section class="architecture">
 
-<div class="section-label">08 — Lightweight Agent</div>
+  <div class="container">
 
-<h2>The Citrix installation should be deliberately small</h2>
+    <h2 class="section-title">
+      Project Structure
+    </h2>
 
-<div class="grid-2">
+    <p class="section-subtitle">
+      Only the lightweight execution agent is deployed inside Citrix.
+    </p>
 
-<div class="card">
 
-<h3>Recommended Model</h3>
+    <div class="grid-2">
 
-<p>
-Package the required Python runtime, PyWinAuto, UIA integration and REST
-server into a standalone executable.
-</p>
+      <div class="card">
 
-<div class="callout green">
-<b>Target:</b> <code>agent.exe</code>
-</div>
+        <h3>Local Machine</h3>
 
-<ul class="check-list">
-<li>No full automation repository</li>
-<li>No PyTest installation required</li>
-<li>No Page Objects</li>
-<li>No test data repository</li>
-<li>No reporting framework</li>
-<li>No Inspect.exe dependency</li>
-<li>No OCR engine</li>
-<li>No coordinate scripts</li>
-</ul>
+        <div class="code">
 
-</div>
-
-<div class="card">
-
-<h3>Agent Responsibilities</h3>
-
-<table>
-<tr>
-<th>Capability</th>
-<th>Purpose</th>
-</tr>
-
-<tr>
-<td>REST API</td>
-<td>Receive automation commands</td>
-</tr>
-
-<tr>
-<td>Locator Engine</td>
-<td>Resolve UIA properties</td>
-</tr>
-
-<tr>
-<td>UIA / PyWinAuto</td>
-<td>Interact with TradeEngine</td>
-</tr>
-
-<tr>
-<td>Inspector</td>
-<td>Return live UI metadata</td>
-</tr>
-
-<tr>
-<td>Execution</td>
-<td>Click, type, wait, read text</td>
-</tr>
-
-<tr>
-<td>Response</td>
-<td>Return status/data to local runner</td>
-</tr>
-</table>
-
-</div>
-
-</div>
-
-<h3 class="mt">Recommended API Surface</h3>
-
-<div class="grid-3">
-
-<div class="card">
-<span class="tag tag-cyan">DISCOVERY</span>
-<h3>GET /health</h3>
-<p>Confirm agent availability.</p>
-</div>
-
-<div class="card">
-<span class="tag tag-cyan">DISCOVERY</span>
-<h3>POST /inspect</h3>
-<p>Return UIA properties for selected/focused control.</p>
-</div>
-
-<div class="card">
-<span class="tag tag-green">ACTION</span>
-<h3>POST /click</h3>
-<p>Click a UIA control.</p>
-</div>
-
-<div class="card">
-<span class="tag tag-green">ACTION</span>
-<h3>POST /type</h3>
-<p>Enter text into a control.</p>
-</div>
-
-<div class="card">
-<span class="tag tag-green">ACTION</span>
-<h3>POST /get-text</h3>
-<p>Read text/value from a control.</p>
-</div>
-
-<div class="card">
-<span class="tag tag-green">ACTION</span>
-<h3>POST /wait</h3>
-<p>Wait for a control/state.</p>
-</div>
-
-</div>
-
-</div>
-</section>
-
-
-<!-- =========================================================
-     09 DEPLOYMENT
-========================================================= -->
-
-<section id="deployment">
-<div class="container">
-
-<div class="section-label">09 — Deployment Model</div>
-
-<h2>One-time Citrix deployment</h2>
-
-<div class="timeline">
-
-<div class="timeline-item">
-<div class="timeline-dot"></div>
-
-<h3>1. Obtain infrastructure approval</h3>
-
-<p>
-Confirm that a lightweight executable is permitted within the approved
-interactive Citrix session.
-</p>
-</div>
-
-<div class="timeline-item">
-<div class="timeline-dot"></div>
-
-<h3>2. Deploy agent.exe</h3>
-
-<p>
-Place the signed/approved agent package on the designated Citrix machine
-or approved automation location.
-</p>
-</div>
-
-<div class="timeline-item">
-<div class="timeline-dot"></div>
-
-<h3>3. Configure agent</h3>
-
-<p>
-Configure port, authentication, session binding and logging policy.
-</p>
-</div>
-
-<div class="timeline-item">
-<div class="timeline-dot"></div>
-
-<h3>4. Start agent in interactive session</h3>
-
-<p>
-The agent must run in the same Windows desktop session as TradeEngine.
-</p>
-</div>
-
-<div class="timeline-item">
-<div class="timeline-dot"></div>
-
-<h3>5. Validate health endpoint</h3>
-
-<p>
-Local automation environment confirms the agent is reachable.
-</p>
-</div>
-
-<div class="timeline-item">
-<div class="timeline-dot"></div>
-
-<h3>6. Leave the Citrix environment unchanged</h3>
-
-<p>
-Future test development happens from the local automation repository.
-</p>
-</div>
-
-</div>
-
-<div class="callout green">
-<b>Deployment principle:</b>
-The third-party TradeEngine installation is not modified. The agent is an
-external automation bridge operating alongside the application within the
-Windows session.
-</div>
-
-</div>
-</section>
-
-
-<!-- =========================================================
-     10 FILE STRUCTURE
-========================================================= -->
-
-<section id="files">
-<div class="container">
-
-<div class="section-label">10 — File Architecture</div>
-
-<h2>Everything important stays on the local machine</h2>
-
-<div class="grid-2">
-
-<div class="card">
-
-<h3>Local Automation Repository</h3>
-
-<div class="tree">TradeEngineAutomation/
+<pre>
+TradeEngineAutomation/
 │
 ├── locator_tool/
 │   └── inspector.py
@@ -1839,846 +1259,504 @@ Windows session.
 │   ├── base_page.py
 │   └── config.py
 │
-├── test_data/
-│   └── test_data.json
-│
 ├── reports/
 │
 ├── conftest.py
 ├── pytest.ini
-└── requirements.txt</div>
+└── requirements.txt
+</pre>
 
-</div>
+        </div>
+
+      </div>
 
 
-<div class="card">
+      <div class="card">
 
-<h3>Citrix — One-Time Setup</h3>
+        <h3>Citrix Machine</h3>
 
-<div class="tree">C:\TradeEngineAgent\
+        <div class="code">
+
+<pre>
+C:\TradeEngineAgent\
 │
 ├── agent.exe
 │
 ├── config.json
 │
 └── logs\
-    └── agent.log</div>
+    └── agent.log
+</pre>
 
-<br>
+        </div>
 
-<p>
-The Citrix environment should contain the minimum required runtime required
-to inspect and operate the live Windows UI.
-</p>
+        <div class="highlight">
 
-<div class="callout orange">
-Avoid copying the complete automation repository into Citrix.
-</div>
+          <strong>One-time setup:</strong>
 
-</div>
+          The Citrix environment requires only the approved
+          lightweight agent and its configuration.
 
-</div>
+        </div>
 
-</div>
+      </div>
+
+    </div>
+
+  </div>
+
 </section>
 
 
-<!-- =========================================================
-     11 SECURITY
-========================================================= -->
-
-<section id="security">
-<div class="container">
-
-<div class="section-label">11 — Security Architecture</div>
-
-<h2>Controlled, least-privilege communication</h2>
-
-<div class="table-wrap mt">
-
-<table>
-
-<tr>
-<th>Area</th>
-<th>Recommended Control</th>
-</tr>
-
-<tr>
-<td>Network</td>
-<td>Internal corporate network only</td>
-</tr>
-
-<tr>
-<td>Authentication</td>
-<td>Token/service authentication for API requests</td>
-</tr>
-
-<tr>
-<td>Authorization</td>
-<td>Allow only approved automation actions</td>
-</tr>
-
-<tr>
-<td>Session</td>
-<td>Bind execution to the intended Citrix interactive session</td>
-</tr>
-
-<tr>
-<td>Privileges</td>
-<td>Run using standard user permissions where possible</td>
-</tr>
-
-<tr>
-<td>Encryption</td>
-<td>HTTPS where required by enterprise security policy</td>
-</tr>
-
-<tr>
-<td>Audit</td>
-<td>Log command, timestamp, session and result</td>
-</tr>
-
-<tr>
-<td>Exposure</td>
-<td>Do not expose agent directly to the public internet</td>
-</tr>
-
-</table>
-
-</div>
-
-<div class="grid-3 mt">
-
-<div class="card">
-<h3>Least Privilege</h3>
-<p>
-Agent should not require local administrator privileges unless explicitly
-required by the infrastructure design.
-</p>
-</div>
-
-<div class="card">
-<h3>Restricted Endpoint</h3>
-<p>
-Only approved automation clients should be able to invoke the agent.
-</p>
-</div>
-
-<div class="card">
-<h3>Auditability</h3>
-<p>
-Every remote action can be logged for troubleshooting and compliance.
-</p>
-</div>
-
-</div>
-
-</div>
-</section>
-
-
-<!-- =========================================================
-     12 UIA VS PIXEL
-========================================================= -->
+<!-- =====================================================
+     SECURITY
+===================================================== -->
 
 <section>
-<div class="container">
 
-<div class="section-label">12 — Automation Strategy</div>
+  <div class="container">
 
-<h2>Why UIA is preferred over pixel automation</h2>
+    <h2 class="section-title">
+      Security &amp; Deployment
+    </h2>
 
-<div class="table-wrap">
+    <p class="section-subtitle">
+      The automation channel should remain inside the approved
+      corporate network boundary.
+    </p>
 
-<table>
 
-<tr>
-<th>Characteristic</th>
-<th>Pixel / Image / OCR</th>
-<th>UIA Agent</th>
-</tr>
+    <div class="grid">
 
-<tr>
-<td>Element targeting</td>
-<td>Coordinates / image matching</td>
-<td>AutomationId / Name / ControlType / hierarchy</td>
-</tr>
+      <div class="card">
 
-<tr>
-<td>DPI changes</td>
-<td>Can break automation</td>
-<td>Generally independent of screen coordinates</td>
-</tr>
+        <div class="icon">S1</div>
 
-<tr>
-<td>Resolution</td>
-<td>Highly sensitive</td>
-<td>Not dependent on screenshot resolution</td>
-</tr>
+        <h3>Internal Network</h3>
 
-<tr>
-<td>Application theme</td>
-<td>Can affect image matching</td>
-<td>Metadata-based</td>
-</tr>
+        <p>
+          Agent communication should use an approved internal
+          network path rather than public internet exposure.
+        </p>
 
-<tr>
-<td>Maintenance</td>
-<td>High</td>
-<td>Lower when stable UIA properties exist</td>
-</tr>
+      </div>
 
-<tr>
-<td>Execution location</td>
-<td>Usually outside / visual stream</td>
-<td>Inside target Windows session</td>
-</tr>
 
-<tr>
-<td>Debugging</td>
-<td>Screenshot analysis</td>
-<td>Control metadata and structured logs</td>
-</tr>
+      <div class="card">
 
-</table>
+        <div class="icon">S2</div>
 
-</div>
+        <h3>Authentication</h3>
 
-<div class="callout">
-<b>Important:</b>
-"Locator-driven" does not mean every application automatically exposes
-perfect locators. The quality of automation depends on the UIA/accessibility
-metadata exposed by TradeEngine.
-</div>
+        <p>
+          Protect the agent API with authentication and
+          authorization appropriate to the environment.
+        </p>
 
-</div>
+      </div>
+
+
+      <div class="card">
+
+        <div class="icon">S3</div>
+
+        <h3>Auditability</h3>
+
+        <p>
+          Log automation requests, execution status and
+          failures without storing unnecessary sensitive data.
+        </p>
+
+      </div>
+
+    </div>
+
+  </div>
+
 </section>
 
 
-<!-- =========================================================
-     13 ROADMAP
-========================================================= -->
+<!-- =====================================================
+     UIA VS PIXEL
+===================================================== -->
 
-<section id="roadmap">
-<div class="container">
+<section class="architecture">
 
-<div class="section-label">13 — Implementation Roadmap</div>
+  <div class="container">
 
-<h2>Build the smallest proof first</h2>
+    <h2 class="section-title">
+      Why UI Automation Instead of Pixel Automation?
+    </h2>
 
-<div class="grid-3">
 
-<div class="card">
-<span class="tag tag-cyan">PHASE 1</span>
-<h3>UIA Feasibility</h3>
-<p><b>3–5 days</b></p>
-<ul class="check-list">
-<li>Run PyWinAuto in Citrix</li>
-<li>Find TradeEngine window</li>
-<li>Enumerate controls</li>
-<li>Validate AutomationId/Name/ControlType</li>
-</ul>
-</div>
+    <div class="table-wrap">
 
-<div class="card">
-<span class="tag tag-green">PHASE 2</span>
-<h3>Remote Inspector</h3>
-<p><b>~1 week</b></p>
-<ul class="check-list">
-<li>Build agent inspection endpoint</li>
-<li>Return UIA metadata</li>
-<li>Build local locator tool</li>
-<li>Save JSON locators</li>
-</ul>
-</div>
+      <table>
 
-<div class="card">
-<span class="tag tag-purple">PHASE 3</span>
-<h3>Action Engine</h3>
-<p><b>1–2 weeks</b></p>
-<ul class="check-list">
-<li>Click</li>
-<li>Type</li>
-<li>Get text</li>
-<li>Wait</li>
-</ul>
-</div>
+        <thead>
 
-<div class="card">
-<span class="tag tag-orange">PHASE 4</span>
-<h3>Package Agent</h3>
-<p><b>1–2 weeks</b></p>
-<ul class="check-list">
-<li>PyInstaller packaging</li>
-<li>Configuration</li>
-<li>Session startup</li>
-<li>Logging</li>
-</ul>
-</div>
+          <tr>
+            <th>Capability</th>
+            <th>UIA / PyWinAuto</th>
+            <th>Pixel / Coordinate</th>
+          </tr>
 
-<div class="card">
-<span class="tag tag-cyan">PHASE 5</span>
-<h3>Framework Integration</h3>
-<p><b>1–2 weeks</b></p>
-<ul class="check-list">
-<li>Agent client</li>
-<li>Page Objects</li>
-<li>PyTest fixtures</li>
-<li>Reports</li>
-</ul>
-</div>
+        </thead>
 
-<div class="card">
-<span class="tag tag-green">PHASE 6</span>
-<h3>CI/CD</h3>
-<p><b>Future</b></p>
-<ul class="check-list">
-<li>Execution orchestration</li>
-<li>Session management</li>
-<li>Smoke suite</li>
-<li>Regression suite</li>
-</ul>
-</div>
+        <tbody>
 
-</div>
+          <tr>
+            <td>Real control identification</td>
+            <td class="good">Yes</td>
+            <td class="bad">No</td>
+          </tr>
 
-</div>
+          <tr>
+            <td>AutomationId / Name</td>
+            <td class="good">Available when exposed</td>
+            <td class="bad">No</td>
+          </tr>
+
+          <tr>
+            <td>Resolution independent</td>
+            <td class="good">Generally</td>
+            <td class="bad">No</td>
+          </tr>
+
+          <tr>
+            <td>Screen position dependency</td>
+            <td class="good">Low</td>
+            <td class="bad">High</td>
+          </tr>
+
+          <tr>
+            <td>Maintainability</td>
+            <td class="good">High</td>
+            <td class="warning">Low</td>
+          </tr>
+
+          <tr>
+            <td>Requires visible UI</td>
+            <td class="warning">Usually interactive session</td>
+            <td class="warning">Yes</td>
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
 </section>
 
 
-<!-- =========================================================
-     14 SUCCESS CRITERIA
-========================================================= -->
-
-<section id="success">
-<div class="container">
-
-<div class="section-label">14 — POC Success Criteria</div>
-
-<h2>What proves the architecture works?</h2>
-
-<div class="grid-2">
-
-<div class="card">
-
-<h3>Technical Success</h3>
-
-<ul class="check-list">
-<li>Agent starts inside Citrix interactive session</li>
-<li>TradeEngine window is discoverable</li>
-<li>Controls are exposed through UIA</li>
-<li>Locator properties can be returned as JSON</li>
-<li>Local locator tool can save them</li>
-<li>Local Page Object can use them</li>
-</ul>
-
-</div>
-
-<div class="card">
-
-<h3>Execution Success</h3>
-
-<ul class="check-list">
-<li>Local PyTest can invoke the agent</li>
-<li>Agent clicks real TradeEngine controls</li>
-<li>Agent types values into real fields</li>
-<li>Agent reads UI values/results</li>
-<li>Assertions execute locally</li>
-<li>HTML/Allure report is generated locally</li>
-</ul>
-
-</div>
-
-</div>
-
-<div class="callout green mt">
-<b>End-to-end POC:</b>
-Open TradeEngine → inspect Search box → receive actual UIA properties →
-save locator locally → create Page Object → run PyTest locally →
-agent executes inside Citrix → result returns → local report generated.
-</div>
-
-</div>
-</section>
-
-
-<!-- =========================================================
-     15 RISKS
-========================================================= -->
-
-<section id="risks">
-<div class="container">
-
-<div class="section-label">15 — Risks & Mitigations</div>
-
-<h2>Key technical risks</h2>
-
-<div class="table-wrap">
-
-<table>
-
-<tr>
-<th>Risk</th>
-<th>Impact</th>
-<th>Mitigation</th>
-</tr>
-
-<tr>
-<td>TradeEngine does not expose UIA controls</td>
-<td>High</td>
-<td>
-Perform UIA feasibility spike before framework development.
-Evaluate vendor-supported integration if required.
-</td>
-</tr>
-
-<tr>
-<td>UIA properties are unstable</td>
-<td>Medium</td>
-<td>
-Use multiple attributes and hierarchical locators instead of relying on
-one property.
-</td>
-</tr>
-
-<tr>
-<td>Citrix session unavailable</td>
-<td>High</td>
-<td>
-Use dedicated automation session/service account and approved session policy.
-</td>
-</tr>
-
-<tr>
-<td>Agent blocked by endpoint security</td>
-<td>Medium</td>
-<td>
-Use signed/package-approved executable and involve infrastructure/security
-teams early.
-</td>
-</tr>
-
-<tr>
-<td>Network communication blocked</td>
-<td>Medium</td>
-<td>
-Define an approved internal route and restricted port/firewall rule.
-</td>
-</tr>
-
-<tr>
-<td>Third-party application changes</td>
-<td>Medium</td>
-<td>
-Centralize locators in Page Objects / JSON repository.
-</td>
-</tr>
-
-</table>
-
-</div>
-
-</div>
-</section>
-
-
-<!-- =========================================================
-     16 OPERATING MODEL
-========================================================= -->
+<!-- =====================================================
+     FEASIBILITY GATE
+===================================================== -->
 
 <section>
-<div class="container">
 
-<div class="section-label">16 — Operating Model</div>
+  <div class="container">
 
-<h2>What changes after the one-time setup?</h2>
+    <h2 class="section-title">
+      Critical Feasibility Gate
+    </h2>
 
-<div class="grid-2">
+    <p class="section-subtitle">
+      Validate the application before investing in the complete framework.
+    </p>
 
-<div class="card">
 
-<h3>Citrix Team</h3>
+    <div class="grid-2">
 
-<ul class="check-list">
-<li>Approve agent deployment</li>
-<li>Install agent once</li>
-<li>Configure session/network access</li>
-<li>Maintain the Citrix application environment</li>
-</ul>
+      <div class="card">
 
-<p class="highlight">
-No daily automation development required inside Citrix.
-</p>
+        <div class="icon">GO</div>
 
-</div>
+        <h3>UIA Controls Are Exposed</h3>
 
-<div class="card">
+        <p>
+          PyWinAuto can identify TradeEngine controls and retrieve
+          meaningful properties such as Name, AutomationId,
+          ControlType and ClassName.
+        </p>
 
-<h3>QA Automation Team</h3>
+      </div>
 
-<ul class="check-list">
-<li>Discover locators</li>
-<li>Maintain Page Objects</li>
-<li>Write PyTest scenarios</li>
-<li>Maintain test data</li>
-<li>Execute automation</li>
-<li>Analyze reports</li>
-</ul>
 
-<p class="highlight">
-All normal automation development happens locally.
-</p>
+      <div class="card">
 
-</div>
+        <div class="icon">NO</div>
 
-</div>
+        <h3>UIA Tree Is Not Exposed</h3>
 
-</div>
+        <p>
+          If the application does not expose useful UIA metadata,
+          the architecture should not fall back automatically to
+          fragile coordinate automation. Vendor-supported APIs or
+          approved integration mechanisms should be evaluated.
+        </p>
+
+      </div>
+
+    </div>
+
+  </div>
+
 </section>
 
 
-<!-- =========================================================
-     17 FINAL END-TO-END DIAGRAM
-========================================================= -->
-
-<section id="recommendation">
-<div class="container">
-
-<div class="section-label">17 — Recommended End State</div>
-
-<h2>The final operating model</h2>
-
-<div class="architecture mt">
-
-<svg viewBox="0 0 1400 650"
-xmlns="http://www.w3.org/2000/svg">
-
-<defs>
-
-<marker id="finalArrow" markerWidth="12" markerHeight="12"
-refX="10" refY="4" orient="auto">
-<path d="M0,0 L0,8 L11,4 z" fill="#25d9ff"/>
-</marker>
-
-<marker id="finalGreen" markerWidth="12" markerHeight="12"
-refX="10" refY="4" orient="auto">
-<path d="M0,0 L0,8 L11,4 z" fill="#39e6a5"/>
-</marker>
-
-</defs>
-
-<!-- Local -->
-
-<rect x="40" y="50" width="430" height="520"
-rx="28" fill="#0e2237"
-stroke="#25d9ff" stroke-width="2"/>
-
-<text x="255" y="95"
-fill="#25d9ff"
-font-size="28"
-font-weight="bold"
-text-anchor="middle">
-YOUR LOCAL MACHINE
-</text>
-
-<text x="255" y="125"
-fill="#9db4c9"
-font-size="14"
-text-anchor="middle">
-Automation ownership
-</text>
-
-<rect x="85" y="165" width="340" height="65"
-rx="13" fill="#07111f" stroke="#315a78"/>
-<text x="255" y="205" fill="#fff"
-font-size="18" text-anchor="middle">
-Locator Inspector
-</text>
-
-<rect x="85" y="250" width="340" height="65"
-rx="13" fill="#07111f" stroke="#315a78"/>
-<text x="255" y="290" fill="#fff"
-font-size="18" text-anchor="middle">
-Locator JSON
-</text>
-
-<rect x="85" y="335" width="340" height="65"
-rx="13" fill="#07111f" stroke="#315a78"/>
-<text x="255" y="375" fill="#fff"
-font-size="18" text-anchor="middle">
-Page Objects
-</text>
-
-<rect x="85" y="420" width="340" height="65"
-rx="13" fill="#07111f" stroke="#315a78"/>
-<text x="255" y="460" fill="#fff"
-font-size="18" text-anchor="middle">
-PyTest + Reports
-</text>
-
-
-<!-- Agent -->
-
-<rect x="540" y="50" width="320" height="520"
-rx="28" fill="#0b2a29"
-stroke="#39e6a5" stroke-width="2"/>
-
-<text x="700" y="95"
-fill="#39e6a5"
-font-size="28"
-font-weight="bold"
-text-anchor="middle">
-LIGHTWEIGHT AGENT
-</text>
-
-<text x="700" y="125"
-fill="#9db4c9"
-font-size="14"
-text-anchor="middle">
-One-time Citrix setup
-</text>
-
-<rect x="585" y="170" width="230" height="80"
-rx="14" fill="#07111f" stroke="#39e6a5"/>
-<text x="700" y="218" fill="#fff"
-font-size="22"
-font-weight="bold"
-text-anchor="middle">
-agent.exe
-</text>
-
-<rect x="585" y="275" width="230" height="65"
-rx="14" fill="#07111f" stroke="#315a78"/>
-<text x="700" y="315" fill="#fff"
-font-size="17" text-anchor="middle">
-REST API
-</text>
-
-<rect x="585" y="365" width="230" height="65"
-rx="14" fill="#07111f" stroke="#315a78"/>
-<text x="700" y="405" fill="#fff"
-font-size="17" text-anchor="middle">
-PyWinAuto / UIA
-</text>
-
-<rect x="585" y="455" width="230" height="65"
-rx="14" fill="#07111f" stroke="#315a78"/>
-<text x="700" y="495" fill="#fff"
-font-size="17" text-anchor="middle">
-Execution Result
-</text>
-
-
-<!-- TradeEngine -->
-
-<rect x="930" y="50" width="430" height="520"
-rx="28" fill="#17152e"
-stroke="#a78bfa" stroke-width="2"/>
-
-<text x="1145" y="95"
-fill="#a78bfa"
-font-size="28"
-font-weight="bold"
-text-anchor="middle">
-CITRIX + TRADEENGINE
-</text>
-
-<text x="1145" y="125"
-fill="#9db4c9"
-font-size="14"
-text-anchor="middle">
-Third-party application remains unchanged
-</text>
-
-<rect x="975" y="170" width="340" height="280"
-rx="18" fill="#07111f"
-stroke="#a78bfa"/>
-
-<text x="1145" y="215"
-fill="#fff"
-font-size="22"
-font-weight="bold"
-text-anchor="middle">
-TradeEngine
-</text>
-
-<text x="1010" y="260"
-fill="#fff"
-font-size="15">
-Customer ID
-</text>
-
-<rect x="1010" y="275"
-width="270" height="35"
-rx="5" fill="#e8f3ff"/>
-
-<text x="1025" y="298"
-fill="#172b3e"
-font-size="13">
-ABC123
-</text>
-
-<text x="1010" y="345"
-fill="#fff"
-font-size="15">
-Order ID
-</text>
-
-<rect x="1010" y="360"
-width="270" height="35"
-rx="5" fill="#e8f3ff"/>
-
-<text x="1145" y="420"
-fill="#39e6a5"
-font-size="15"
-text-anchor="middle">
-Real Windows UI Controls
-</text>
-
-
-<!-- Arrows -->
-
-<line x1="470" y1="210"
-x2="540" y2="210"
-stroke="#25d9ff"
-stroke-width="4"
-marker-end="url(#finalArrow)"/>
-
-<text x="505" y="190"
-fill="#25d9ff"
-font-size="12"
-text-anchor="middle">
-REST
-</text>
-
-<line x1="540" y1="300"
-x2="470" y2="300"
-stroke="#39e6a5"
-stroke-width="3"
-marker-end="url(#finalGreen)"/>
-
-<text x="505" y="325"
-fill="#39e6a5"
-font-size="12"
-text-anchor="middle">
-JSON
-</text>
-
-<line x1="860" y1="300"
-x2="930" y2="300"
-stroke="#25d9ff"
-stroke-width="4"
-marker-end="url(#finalArrow)"/>
-
-<text x="895" y="280"
-fill="#25d9ff"
-font-size="12"
-text-anchor="middle">
-UIA
-</text>
-
-<line x1="930" y1="410"
-x2="860" y2="410"
-stroke="#39e6a5"
-stroke-width="3"
-marker-end="url(#finalGreen)"/>
-
-<text x="895" y="435"
-fill="#39e6a5"
-font-size="12"
-text-anchor="middle">
-Result
-</text>
-
-</svg>
-
-</div>
-
-
-<div class="card mt center">
-
-<h2>Recommended Architecture Statement</h2>
-
-<p style="font-size:20px;color:#d9ebf7;max-width:1000px;margin:20px auto">
-
-<b>
-"Deploy a lightweight automation agent once inside the Citrix interactive
-session, while keeping locator management, Page Objects, PyTest scenarios,
-test data, reporting and automation development entirely within the local
-QA environment."
-</b>
-
-</p>
-
-</div>
-
-
-<div class="grid-3 mt">
-
-<div class="card">
-<h3>Lightweight</h3>
-<p>
-One packaged agent rather than a complete automation framework inside
-the third-party Citrix environment.
-</p>
-</div>
-
-<div class="card">
-<h3>Maintainable</h3>
-<p>
-Locators and test logic remain under normal source-control and QA
-development practices.
-</p>
-</div>
-
-<div class="card">
-<h3>Enterprise Friendly</h3>
-<p>
-The vendor application remains unchanged and the automation boundary is
-clearly isolated through the agent.
-</p>
-</div>
-
-</div>
-
-
-<div class="callout green mt">
-
-<b>Recommended next step:</b>
-
-Start with a small UIA feasibility spike on one TradeEngine screen.
-Confirm that a Search box, button and one result/grid control expose useful
-UIA properties. Once that gate passes, build the lightweight agent and
-remote locator workflow before expanding into full regression automation.
-
-</div>
-
-</div>
+<!-- =====================================================
+     ROADMAP
+===================================================== -->
+
+<section class="architecture">
+
+  <div class="container">
+
+    <h2 class="section-title">
+      POC Roadmap
+    </h2>
+
+
+    <div class="flow">
+
+      <div class="step">
+
+        <div class="step-number">1</div>
+
+        <h3>UIA Feasibility</h3>
+
+        <p>
+          Verify that TradeEngine controls are exposed through
+          Windows UI Automation.
+        </p>
+
+      </div>
+
+
+      <div class="step">
+
+        <div class="step-number">2</div>
+
+        <h3>Locator Inspector</h3>
+
+        <p>
+          Build the lightweight locator discovery endpoint.
+        </p>
+
+      </div>
+
+
+      <div class="step">
+
+        <div class="step-number">3</div>
+
+        <h3>Execution Agent</h3>
+
+        <p>
+          Implement click, type, get-text and wait operations.
+        </p>
+
+      </div>
+
+
+      <div class="step">
+
+        <div class="step-number">4</div>
+
+        <h3>PyTest Framework</h3>
+
+        <p>
+          Build Page Objects, test scenarios and reporting.
+        </p>
+
+      </div>
+
+    </div>
+
+  </div>
+
 </section>
 
 
-<!-- =========================================================
+<!-- =====================================================
+     SUCCESS CRITERIA
+===================================================== -->
+
+<section>
+
+  <div class="container">
+
+    <h2 class="section-title">
+      POC Success Criteria
+    </h2>
+
+
+    <div class="grid">
+
+      <div class="card">
+
+        <div class="icon">✓</div>
+
+        <h3>Locator Capture</h3>
+
+        <p>
+          Select a TradeEngine control and retrieve meaningful
+          UIA properties.
+        </p>
+
+      </div>
+
+
+      <div class="card">
+
+        <div class="icon">✓</div>
+
+        <h3>Remote Execution</h3>
+
+        <p>
+          Execute click and type operations against the real
+          TradeEngine control from a local PyTest test.
+        </p>
+
+      </div>
+
+
+      <div class="card">
+
+        <div class="icon">✓</div>
+
+        <h3>Maintainability</h3>
+
+        <p>
+          Update locators independently from test scenarios
+          through Page Objects.
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <div class="highlight">
+
+      <strong>Recommended Decision:</strong>
+
+      Start with a small UIA feasibility POC before implementing
+      the complete automation framework. The result of this test
+      determines whether PyWinAuto can reliably automate TradeEngine.
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =====================================================
+     FINAL ARCHITECTURE
+===================================================== -->
+
+<section class="architecture">
+
+  <div class="container">
+
+    <h2 class="section-title">
+      Final End-to-End Model
+    </h2>
+
+
+    <div class="code">
+
+<pre>
+                         LOCAL QA MACHINE
+┌───────────────────────────────────────────────────────┐
+│                                                       │
+│   Locator Inspector                                   │
+│          │                                            │
+│          ▼                                            │
+│   Locator Repository                                  │
+│          │                                            │
+│          ▼                                            │
+│   Page Objects                                         │
+│          │                                            │
+│          ▼                                            │
+│   PyTest                                               │
+│          │                                            │
+│          ▼                                            │
+│   Agent Client                                         │
+│                                                       │
+└───────────────────────┬───────────────────────────────┘
+                        │
+                        │  REST / HTTPS
+                        │
+                        ▼
+                 CITRIX ENVIRONMENT
+┌───────────────────────────────────────────────────────┐
+│                                                       │
+│                 Interactive Session                   │
+│                                                       │
+│                 ┌───────────────┐                     │
+│                 │   agent.exe   │                     │
+│                 └───────┬───────┘                     │
+│                         │                             │
+│                         ▼                             │
+│                 ┌───────────────┐                     │
+│                 │   PyWinAuto   │                     │
+│                 │ backend="uia" │                     │
+│                 └───────┬───────┘                     │
+│                         │                             │
+│                         ▼                             │
+│                 ┌───────────────┐                     │
+│                 │  UI Automation│                     │
+│                 └───────┬───────┘                     │
+│                         │                             │
+│                         ▼                             │
+│                 ┌───────────────┐                     │
+│                 │  TradeEngine  │                     │
+│                 └───────────────┘                     │
+│                                                       │
+└───────────────────────────────────────────────────────┘
+
+                    RESULT
+                       │
+                       ▼
+
+              LOCAL HTML / ALLURE REPORT
+</pre>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =====================================================
      FOOTER
-========================================================= -->
+===================================================== -->
 
-<footer>
+<footer class="footer">
 
-<div class="container">
+  <div class="container">
 
-<p>
-TradeEngine Citrix UI Automation • Lightweight Agent Architecture
-</p>
+    <p>
+      <strong>TradeEngine Citrix UI Automation</strong>
+    </p>
 
-<p>
-Enterprise Solutions Architecture • Automation Working Group
-</p>
+    <p>
+      Architecture Proposal prepared by
+      <strong>Hariprakash Baskar</strong>
+    </p>
 
-<p>
-<b>Design principle:</b>
-One-time Citrix setup • Local automation ownership • Remote UI execution
-</p>
+    <p>
+      PyWinAuto • Windows UI Automation • PyTest • Citrix
+    </p>
 
-</div>
+  </div>
 
 </footer>
 
